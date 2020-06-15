@@ -12,9 +12,6 @@ router.get("/", (req, res) => {
   res.send("you on authentication router");
 });
 
-router.get("/protected", loggedIn, (req, res) => {
-  res.send("hello user");
-});
 router.post("/signup", (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
