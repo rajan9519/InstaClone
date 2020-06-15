@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const loggedIn = require("../middleware/loggedIn");
 const { JWT_SECRET } = require("../keys");
 const User = mongoose.model("User");
 
@@ -11,6 +12,9 @@ router.get("/", (req, res) => {
   res.send("you on authentication router");
 });
 
+router.get("/protected", loggedIn, (req, res) => {
+  res.send("hello user");
+});
 router.post("/signup", (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
