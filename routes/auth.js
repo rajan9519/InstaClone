@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const { JWT_SECRET } = require("../keys");
 const User = mongoose.model("User");
 
 router.get("/", (req, res) => {
@@ -59,7 +62,9 @@ router.post("/signin", (req, res) => {
       .compare(password, savedUser.password)
       .then((matched) => {
         if (matched) {
-          res.json({ message: "User Exist" });
+          // res.json({ message: "User Exist" });
+          const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
+          res.json({ token });
         } else {
           res.json({ message: "Invalid User Or Password" });
         }
