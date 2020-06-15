@@ -4,7 +4,14 @@ const mongoose = require("mongoose");
 
 const Post = mongoose.model("Post");
 router.get("/", (req, res) => {
-  res.send("you are in posts routes");
+  Post.find()
+    .populate("postedBy", "_id name")
+    .then((posts) => {
+      res.json({ posts });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 router.post("/createPost", (req, res) => {
