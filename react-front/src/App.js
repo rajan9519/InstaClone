@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
-import logo from "./logo.svg";
 import "./App.css";
 import NavBar from "./components/NavBar";
 import { Home, SignUp, Profile, SignIn } from "./components/screens";
@@ -12,13 +11,13 @@ function App() {
       <Route exact path="/">
         <Home />
       </Route>
-      <Route exact path="/SignUp">
+      <Route exact path="/signup">
         <SignUp />
       </Route>
-      <Route exact path="/SignIn">
+      <Route exact path="/signin">
         <SignIn />
       </Route>
-      <Route exact path="/Profile">
+      <Route exact path="/profile">
         <Profile />
       </Route>
     </BrowserRouter>
