@@ -2,7 +2,12 @@ import React from "react";
 import { Post } from "../presentation";
 
 const Home = () => {
-  return <Post />;
+  return (
+    <div>
+      <Post />;
+      <Post />;
+    </div>
+  );
 };
 
 export default Home;
