@@ -12,7 +12,21 @@ const SignUp = () => {
   };
 
   const handleSubmit = () => {
-    console.log("succesfully sublitteed");
+    fetch("/signup", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        password,
+        email,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
   };
 
   const handleChange = (e) => {
