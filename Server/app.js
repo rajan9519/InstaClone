@@ -11,6 +11,6 @@ app.use(express.json());
 app.use("/", register);
 app.use("/post", loggedIn, posts);
 
-app.listen(3000, () => {
+app.listen(5000, () => {
   console.log("listening port 3000");
 });
