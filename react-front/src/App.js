@@ -2,7 +2,13 @@ import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
 import NavBar from "./components/NavBar";
-import { Home, SignUp, Profile, SignIn } from "./components/screens";
+import {
+  Home,
+  SignUp,
+  Profile,
+  SignIn,
+  CreatePost,
+} from "./components/screens";
 
 function App() {
   return (
@@ -19,6 +25,9 @@ function App() {
       </Route>
       <Route exact path="/profile">
         <Profile />
+      </Route>
+      <Route exact path="/createpost">
+        <CreatePost />
       </Route>
     </BrowserRouter>
   );
