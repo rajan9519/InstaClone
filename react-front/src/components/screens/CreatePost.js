@@ -5,7 +5,8 @@ const CreatePost = () => {
   const [body, setBody] = useState("");
   const [image, setImage] = useState("");
   const handleSubmit = () => {
-    console.log("submitted successfully");
+    const data = new FormData();
+    data.append("file", image);
   };
   return (
     <div>
