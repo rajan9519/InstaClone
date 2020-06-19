@@ -1,13 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Post } from "../presentation";
 
 const Home = () => {
-  return (
-    <div>
-      <Post />;
-      <Post />;
-    </div>
-  );
+  let allPosts;
+
+  const [posts, setPosts] = useState("");
+
+  useEffect(() => {
+    if (!posts) {
+      fetch("/post", {
+        method: "get",
+        headers: { authorization: localStorage.getItem("token") },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPosts(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [posts]);
+
+  if (posts) {
+    allPosts = posts.map((post) => (
+      <Post filename={post.filename} key={post._id} />
+    ));
+  }
+
+  return <div>{allPosts}</div>;
 };
 
 export default Home;

@@ -6,6 +6,7 @@ const multer = require("multer");
 const crypto = require("crypto");
 const GridFsStorage = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
+const loggedIn = require("../middleware/loggedIn");
 const mongoURI = require("../keys").MONGO_URL;
 
 const conn = mongoose.createConnection(mongoURI);
@@ -26,6 +27,7 @@ const storage = new GridFsStorage({
           return reject(err);
         }
         const filename = buf.toString("hex") + path.extname(file.originalname);
+        req.filename = filename;
         const fileInfo = {
           filename: filename,
           bucketName: "images",
@@ -38,7 +40,7 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 const Post = mongoose.model("Post");
-router.get("/", (req, res) => {
+router.get("/", loggedIn, (req, res) => {
   // Post.find()
   //   .populate("postedBy", "_id name")
   //   .then((posts) => {
@@ -95,7 +97,7 @@ router.get("/image/:filename", (req, res) => {
   });
 });
 
-router.post("/createPost", upload.single("file"), (req, res) => {
+router.post("/createPost", loggedIn, upload.single("file"), (req, res) => {
   const { title, body } = req.body;
   if (!title || !body) {
     res.status(422).json({ error: "Please add all the fields" });
@@ -105,6 +107,7 @@ router.post("/createPost", upload.single("file"), (req, res) => {
     title,
     body,
     postedBy: req.user,
+    photo: req.filename,
   });
 
   post
@@ -118,7 +121,7 @@ router.post("/createPost", upload.single("file"), (req, res) => {
   console.log("succesully uploaded image");
 });
 
-router.get("/myposts", (req, res) => {
+router.get("/myposts", loggedIn, (req, res) => {
   Post.find({ postedBy: req.user._id })
     .populate("postedBy", "_id name")
     .then((myposts) => {
