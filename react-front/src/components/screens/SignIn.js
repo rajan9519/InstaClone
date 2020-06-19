@@ -6,7 +6,8 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignIn = () => {
+  const handleSignIn = (e) => {
+    e.preventDefault();
     fetch("/signin", {
       method: "post",
       headers: {
@@ -30,31 +31,37 @@ const SignIn = () => {
       });
   };
   return (
-    <div className="mycard">
-      <div className="card auth-card">
-        <h2>Instagram</h2>
-        <input
-          type="text"
-          placeholder="email"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          className="btn waves-effect waves-light #2196f3 blue"
-          onClick={() => handleSignIn()}
-        >
-          SignIn
-        </button>
-        <Link to="/signup">Don't have an account?</Link>
-      </div>
+    <div>
+      <form
+        onSubmit={(e) => {
+          handleSignIn(e);
+        }}
+      >
+        <div className="card auth-card">
+          <h2>Instagram</h2>
+          <input
+            type="text"
+            placeholder="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            className="btn waves-effect waves-light #2196f3 blue"
+            type="submit"
+          >
+            SignIn
+          </button>
+          <Link to="/signup">Don't have an account?</Link>
+        </div>
+      </form>
     </div>
   );
 };

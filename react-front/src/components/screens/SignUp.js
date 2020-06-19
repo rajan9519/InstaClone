@@ -11,7 +11,8 @@ const SignUp = () => {
     return re.test(String(email).toLowerCase());
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     fetch("/signup", {
       method: "post",
       headers: {
@@ -46,38 +47,44 @@ const SignUp = () => {
   };
   return (
     <div className="mycard">
-      <div className="card auth-card">
-        <h2>Instagram</h2>
-        <input
-          type="text"
-          placeholder="name"
-          value={name}
-          name="name"
-          onChange={(e) => handleChange(e)}
-        />
-        <input
-          type="text"
-          placeholder="email"
-          value={email}
-          name="email"
-          onChange={(e) => handleChange(e)}
-        />
-        <input
-          type="password"
-          placeholder="password"
-          value={password}
-          name="password"
-          onChange={(e) => handleChange(e)}
-        />
-        <button
-          className="btn waves-effect waves-light #2196f3 blue"
-          onClick={() => handleSubmit()}
-        >
-          SignUp
-        </button>
+      <form
+        onSubmit={(e) => {
+          handleSubmit(e);
+        }}
+      >
+        <div className="card auth-card">
+          <h2>Instagram</h2>
+          <input
+            type="text"
+            placeholder="name"
+            value={name}
+            name="name"
+            onChange={(e) => handleChange(e)}
+          />
+          <input
+            type="text"
+            placeholder="email"
+            value={email}
+            name="email"
+            onChange={(e) => handleChange(e)}
+          />
+          <input
+            type="password"
+            placeholder="password"
+            value={password}
+            name="password"
+            onChange={(e) => handleChange(e)}
+          />
+          <button
+            className="btn waves-effect waves-light #2196f3 blue"
+            type="submit"
+          >
+            SignUp
+          </button>
 
-        <Link to="/signin">Already have an account?</Link>
-      </div>
+          <Link to="/signin">Already have an account?</Link>
+        </div>
+      </form>
     </div>
   );
 };
