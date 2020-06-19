@@ -8,7 +8,7 @@ const app = express();
 
 app.use(express.json());
 app.use("/", register);
-app.use("/post", posts);
+app.use("/post", loggedIn, posts);
 
 app.listen(5000, () => {
   console.log("listening port 5000");

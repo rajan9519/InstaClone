@@ -24,9 +24,11 @@ const SignIn = () => {
           console.log("error signing in");
         } else {
           localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+
           history.push("/");
-          console.log("succesfull");
-          console.log(localStorage.getItem("token"));
+          console.log(data);
+          console.log(JSON.parse(localStorage.getItem("user")));
         }
       });
   };

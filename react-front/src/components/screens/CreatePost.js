@@ -9,7 +9,8 @@ const CreatePost = () => {
 
     const formData = new FormData();
     formData.append("file", image);
-    console.log(formData);
+    formData.append("title", title);
+    formData.append("body", body);
 
     fetch("/post/createPost", {
       method: "post",
@@ -20,7 +21,7 @@ const CreatePost = () => {
         console.log(data);
       })
       .catch((err) => {
-        console.log(err, "sfdsfdsfdsf");
+        console.log(err);
       });
 
     console.log("uploading");

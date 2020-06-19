@@ -96,7 +96,6 @@ router.get("/image/:filename", (req, res) => {
 });
 
 router.post("/createPost", upload.single("file"), (req, res) => {
-  console.log("something is going tjere");
   const { title, body } = req.body;
   if (!title || !body) {
     res.status(422).json({ error: "Please add all the fields" });
