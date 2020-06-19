@@ -6,6 +6,23 @@ const CreatePost = () => {
   const [image, setImage] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("file", image);
+    console.log(formData);
+
+    fetch("/post/createPost", {
+      method: "post",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err, "sfdsfdsfdsf");
+      });
+
     console.log("uploading");
   };
   return (
@@ -37,7 +54,6 @@ const CreatePost = () => {
           type="file"
           name="image"
           placeholder="Descrition"
-          value={image}
           onChange={(e) => {
             setImage(e.target.files[0]);
           }}

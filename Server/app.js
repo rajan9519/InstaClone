@@ -1,6 +1,5 @@
 const connection = require("./models/index");
 const express = require("express");
-const bodyParser = require("body-parser");
 
 const register = require("./routes/auth");
 const posts = require("./routes/post");
@@ -9,8 +8,8 @@ const app = express();
 
 app.use(express.json());
 app.use("/", register);
-app.use("/post", loggedIn, posts);
+app.use("/post", posts);
 
 app.listen(5000, () => {
-  console.log("listening port 3000");
+  console.log("listening port 5000");
 });
