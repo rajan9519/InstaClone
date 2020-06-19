@@ -15,6 +15,7 @@ const CreatePost = () => {
     fetch("/post/createPost", {
       method: "post",
       body: formData,
+      headers: { authorization: localStorage.getItem("token") },
     })
       .then((res) => res.json())
       .then((data) => {

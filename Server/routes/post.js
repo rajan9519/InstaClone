@@ -106,7 +106,7 @@ router.post("/createPost", upload.single("file"), (req, res) => {
     body,
     postedBy: req.user,
   });
-  req.user.password = undefined;
+
   post
     .save()
     .then((result) => {
