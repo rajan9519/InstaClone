@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext, useReducer } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
 import NavBar from "./components/NavBar";
@@ -9,19 +9,20 @@ import {
   SignIn,
   CreatePost,
 } from "./components/screens";
+import { reducer } from "./reducer/authReducer";
 
-function App() {
+export const AuthContext = createContext();
+export const initialState = {
+  isAuthenticated: false,
+  user: null,
+  token: null,
+};
+
+const AfterSign = () => {
   return (
-    <BrowserRouter>
-      <NavBar />
+    <div>
       <Route exact path="/">
         <Home />
-      </Route>
-      <Route exact path="/signup">
-        <SignUp />
-      </Route>
-      <Route exact path="/signin">
-        <SignIn />
       </Route>
       <Route exact path="/profile">
         <Profile />
@@ -29,6 +30,36 @@ function App() {
       <Route exact path="/createpost">
         <CreatePost />
       </Route>
+    </div>
+  );
+};
+
+const BeforeSign = () => {
+  return (
+    <div>
+      <Route exact path="/signup">
+        <SignUp />
+      </Route>
+      <Route exact path="/signin">
+        <SignIn />
+      </Route>
+    </div>
+  );
+};
+
+function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  return (
+    <BrowserRouter>
+      <AuthContext.Provider
+        value={{
+          state,
+          dispatch,
+        }}
+      >
+        <NavBar />
+        {!state.isAuthenticated ? <BeforeSign /> : <AfterSign />}
+      </AuthContext.Provider>
     </BrowserRouter>
   );
 }
