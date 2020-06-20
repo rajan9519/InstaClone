@@ -1,6 +1,28 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../App";
 
 const Profile = () => {
+  const [posts, setPosts] = useState("");
+  const { state } = useContext(AuthContext);
+  let allpost;
+  useEffect(() => {
+    fetch("/post", {
+      method: "get",
+      headers: { authorization: state.token },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+          return;
+        }
+        setPosts(data);
+        console.log(posts);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <div>
       <div
@@ -59,26 +81,15 @@ const Profile = () => {
           <button>TAGGED</button>
         </div>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-          <img
-            src="https://instagram.fjai1-2.fna.fbcdn.net/v/t51.2885-19/s320x320/79967735_514903752444934_1105358873562185728_n.jpg?_nc_ht=instagram.fjai1-2.fna.fbcdn.net&_nc_ohc=tJTC28-_B6YAX9IxN5y&oh=d89568e3f4ed5c6389ac9ec8beea0729&oe=5F12AFDB"
-            style={{ width: "30%", margin: "10px 10px" }}
-          />
-          <img
-            src="https://instagram.fjai1-2.fna.fbcdn.net/v/t51.2885-19/s320x320/79967735_514903752444934_1105358873562185728_n.jpg?_nc_ht=instagram.fjai1-2.fna.fbcdn.net&_nc_ohc=tJTC28-_B6YAX9IxN5y&oh=d89568e3f4ed5c6389ac9ec8beea0729&oe=5F12AFDB"
-            style={{ width: "30%", margin: "10px 10px" }}
-          />
-          <img
-            src="https://instagram.fjai1-2.fna.fbcdn.net/v/t51.2885-19/s320x320/79967735_514903752444934_1105358873562185728_n.jpg?_nc_ht=instagram.fjai1-2.fna.fbcdn.net&_nc_ohc=tJTC28-_B6YAX9IxN5y&oh=d89568e3f4ed5c6389ac9ec8beea0729&oe=5F12AFDB"
-            style={{ width: "30%", margin: "10px 10px" }}
-          />
-          <img
-            src="https://instagram.fjai1-2.fna.fbcdn.net/v/t51.2885-19/s320x320/79967735_514903752444934_1105358873562185728_n.jpg?_nc_ht=instagram.fjai1-2.fna.fbcdn.net&_nc_ohc=tJTC28-_B6YAX9IxN5y&oh=d89568e3f4ed5c6389ac9ec8beea0729&oe=5F12AFDB"
-            style={{ width: "30%", margin: "10px 10px" }}
-          />
-          <img
-            src="https://instagram.fjai1-2.fna.fbcdn.net/v/t51.2885-19/s320x320/79967735_514903752444934_1105358873562185728_n.jpg?_nc_ht=instagram.fjai1-2.fna.fbcdn.net&_nc_ohc=tJTC28-_B6YAX9IxN5y&oh=d89568e3f4ed5c6389ac9ec8beea0729&oe=5F12AFDB"
-            style={{ width: "30%", margin: "10px 10px" }}
-          />
+          {posts
+            ? posts.map((post) => (
+                <img
+                  key={post._id}
+                  src={"/post/image/" + post.filename}
+                  style={{ width: "30%", margin: "10px 10px" }}
+                />
+              ))
+            : "no image found"}
         </div>
       </div>
     </div>
