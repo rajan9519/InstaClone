@@ -7,20 +7,18 @@ const Home = () => {
   const [posts, setPosts] = useState("");
 
   useEffect(() => {
-    if (!posts) {
-      fetch("/post", {
-        method: "get",
-        headers: { authorization: localStorage.getItem("token") },
+    fetch("/post", {
+      method: "get",
+      headers: { authorization: localStorage.getItem("token") },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data);
       })
-        .then((res) => res.json())
-        .then((data) => {
-          setPosts(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [posts]);
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   if (posts) {
     allPosts = posts.map((post) => (
