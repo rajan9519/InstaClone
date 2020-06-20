@@ -1,5 +1,5 @@
-import React, { createContext, useReducer } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import React, { createContext, useReducer, useContext, useEffect } from "react";
+import { BrowserRouter, Route, useHistory, Switch } from "react-router-dom";
 import "./App.css";
 import NavBar from "./components/NavBar";
 import {
@@ -18,9 +18,20 @@ export const initialState = {
   token: localStorage.getItem("token"),
 };
 
-const AfterSign = () => {
+const Routing = () => {
+  const history = useHistory();
+  const { state, dispatch } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (state.isAuthenticated) {
+      history.push("/");
+    } else {
+      history.push("/signin");
+    }
+    console.log("state changed");
+  }, [state]);
   return (
-    <div>
+    <Switch>
       <Route exact path="/">
         <Home />
       </Route>
@@ -30,37 +41,38 @@ const AfterSign = () => {
       <Route exact path="/createpost">
         <CreatePost />
       </Route>
-    </div>
-  );
-};
-
-const BeforeSign = () => {
-  return (
-    <div>
+      <Route exact path="/signout">
+        <button
+          onClick={() => {
+            dispatch({ type: "SIGNOUT" });
+          }}
+        >
+          Sign out
+        </button>
+      </Route>
       <Route exact path="/signup">
         <SignUp />
       </Route>
       <Route exact path="/signin">
         <SignIn />
       </Route>
-    </div>
+    </Switch>
   );
 };
-
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <BrowserRouter>
-      <AuthContext.Provider
-        value={{
-          state,
-          dispatch,
-        }}
-      >
+    <AuthContext.Provider
+      value={{
+        state,
+        dispatch,
+      }}
+    >
+      <BrowserRouter>
         <NavBar />
-        {!state.isAuthenticated ? <BeforeSign /> : <AfterSign />}
-      </AuthContext.Provider>
-    </BrowserRouter>
+        <Routing />
+      </BrowserRouter>
+    </AuthContext.Provider>
   );
 }
 

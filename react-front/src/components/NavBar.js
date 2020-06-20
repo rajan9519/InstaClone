@@ -11,6 +11,9 @@ const AfterSign = () => {
       <li>
         <Link to="/createpost">Create Post</Link>
       </li>
+      <li>
+        <Link to="/signout">Sign Out</Link>
+      </li>
     </div>
   );
 };
@@ -31,7 +34,10 @@ const NavBar = () => {
   return (
     <nav>
       <div className="nav-wrapper white">
-        <Link to="/" className="brand-logo left">
+        <Link
+          to={state.isAuthenticated ? "/" : "/signin"}
+          className="brand-logo left"
+        >
           Instagram
         </Link>
         <ul id="nav-mobile" className="right">
