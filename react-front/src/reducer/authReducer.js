@@ -1,8 +1,9 @@
 export const reducer = (state, action) => {
   switch (action.type) {
     case "SIGNIN":
-      localStorage.setItem("token", JSON.stringify(action.payload.token));
+      localStorage.setItem("token", action.payload.token);
       localStorage.setItem("user", JSON.stringify(action.payload.user));
+      localStorage.setItem("isAuthenticated", true);
       return {
         ...state,
         isAuthenticated: true,

@@ -13,6 +13,10 @@ const Home = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+          return;
+        }
         setPosts(data);
       })
       .catch((err) => {
@@ -21,6 +25,7 @@ const Home = () => {
   }, []);
 
   if (posts) {
+    console.log(posts);
     allPosts = posts.map((post) => (
       <Post filename={post.filename} key={post._id} />
     ));

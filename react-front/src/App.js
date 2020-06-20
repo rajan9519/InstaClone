@@ -13,9 +13,9 @@ import { reducer } from "./reducer/authReducer";
 
 export const AuthContext = createContext();
 export const initialState = {
-  isAuthenticated: false,
-  user: null,
-  token: null,
+  isAuthenticated: localStorage.getItem("isAuthenticated"),
+  user: localStorage.getItem("user"),
+  token: localStorage.getItem("token"),
 };
 
 const AfterSign = () => {

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { AuthContext } from "../../App";
 
 const SignIn = () => {
+  const { dispatch } = useContext(AuthContext);
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,12 +25,16 @@ const SignIn = () => {
         if (data.error) {
           console.log("error signing in");
         } else {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
+          // localStorage.setItem("token", data.token);
+          // localStorage.setItem("user", JSON.stringify(data.user));
 
-          history.push("/");
-          console.log(data);
-          console.log(JSON.parse(localStorage.getItem("user")));
+          // history.push("/");
+          // console.log(data);
+          // console.log(JSON.parse(localStorage.getItem("user")));
+          dispatch({
+            type: "SIGNIN",
+            payload: data,
+          });
         }
       });
   };
