@@ -1,4 +1,5 @@
 import React from "react";
+import icons from "../../assets";
 
 const Post = (props) => {
   const url = "/post/image/" + props.filename;
@@ -31,25 +32,51 @@ const Post = (props) => {
         />
       </div>
       <img src={url} style={{ width: "100%" }} />
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div style={{ display: "flex" }}>
-          <h6>like</h6>
-          <h6>comment</h6>
+      <div>
+        <section style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ display: "flex" }}>
+            <span>
+              <button>
+                <img src={icons.images.heartIcon}></img>
+              </button>
+            </span>
+            <span>
+              <button>
+                <img src={icons.images.chatIcon}></img>
+              </button>
+            </span>
+            <span>
+              <button>
+                <img src={icons.images.arrowIcon}></img>
+              </button>
+            </span>
+          </div>
+        </section>
+        <section>
+          <div>
+            <span>
+              <span>267</span>" views"
+            </span>
+          </div>
+        </section>
+        <div>
+          <div>
+            <a>
+              "View all "<span>26</span>" comments"
+            </a>
+          </div>
         </div>
-        <h6>bookmark</h6>
-      </div>
-      <div>
-        <h6>liked by rajansingh and 77 others</h6>
-      </div>
-      <div>
-        <h6>view all 77 comments</h6>
-        <h6>some of the popular comments</h6>
-      </div>
-      <div>
-        <h6>time stamp</h6>
-      </div>
-      <div>
-        <h6>add comment part</h6>
+        <div>
+          <a>1 hours ago</a>
+        </div>
+        <section>
+          <div>
+            <form>
+              <textarea></textarea>
+              <button>sumbit</button>
+            </form>
+          </div>
+        </section>
       </div>
     </div>
   );
