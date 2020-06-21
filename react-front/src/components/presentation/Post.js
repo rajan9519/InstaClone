@@ -1,10 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import icons from "../../assets";
 
 const Post = (props) => {
   const url = "/post/image/" + props.filename;
   const url2 =
     "https://instagram.fjai1-2.fna.fbcdn.net/v/t51.2885-19/s320x320/79967735_514903752444934_1105358873562185728_n.jpg?_nc_ht=instagram.fjai1-2.fna.fbcdn.net&_nc_ohc=tJTC28-_B6YAX9IxN5y&oh=d89568e3f4ed5c6389ac9ec8beea0729&oe=5F12AFDB";
+
+  const [userName, setUserName] = useState(props.name);
+  const [postId, setPostId] = useState(props.postId);
+  const [userId, setUserId] = useState(props.userId);
+  const [likes, setLikes] = useState(props.likes);
+
+  const handleLike = () => {
+    fetch("/post/createPost", {
+      method: "put",
+      body: JSON.stringify({
+        postId,
+        userId: JSON.parse(localStorage.getItem("user"))._id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setLikes(data.numLikes);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    console.log("liked");
+  };
   return (
     <div
       style={{
@@ -24,7 +53,7 @@ const Post = (props) => {
             src={url}
             style={{ width: "35px", height: "35px", borderRadius: "17px" }}
           />
-          <h6>im.rajansingh</h6>
+          <h6>{userName}</h6>
         </div>
         <img
           src={url}
@@ -33,10 +62,14 @@ const Post = (props) => {
       </div>
       <img src={url} style={{ width: "100%" }} />
       <div>
-        <section style={{ display: "flex", justifyContent: "space-between" }}>
+        <section>
           <div style={{ display: "flex" }}>
             <span>
-              <button>
+              <button
+                onClick={() => {
+                  handleLike();
+                }}
+              >
                 <img src={icons.images.heartIcon}></img>
               </button>
             </span>
@@ -46,7 +79,7 @@ const Post = (props) => {
               </button>
             </span>
             <span>
-              <button>
+              <button style={{ float: "auto" }}>
                 <img src={icons.images.arrowIcon}></img>
               </button>
             </span>
@@ -55,7 +88,8 @@ const Post = (props) => {
         <section>
           <div>
             <span>
-              <span>267</span>" views"
+              <span>{likes}</span>
+              {"Likes "}
             </span>
           </div>
         </section>

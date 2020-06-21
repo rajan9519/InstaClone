@@ -9,13 +9,16 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  photo: {
+  fileName: {
     type: String,
-    default: "nothing",
+    required: true,
+  },
+  numLikes: {
+    type: Number,
+    default: 0,
   },
   postedBy: {
-    type: ObjectId,
-    ref: "User",
+    type: String,
   },
 });
 

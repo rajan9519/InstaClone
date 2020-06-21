@@ -27,7 +27,14 @@ const Home = () => {
   if (posts) {
     console.log(posts);
     allPosts = posts.map((post) => (
-      <Post filename={post.filename} key={post._id} />
+      <Post
+        filename={post.fileName}
+        name={JSON.parse(post.postedBy).name}
+        likes={post.numLikes}
+        postId={post._id}
+        userId={JSON.parse(post.postedBy)._id}
+        key={post._id}
+      />
     ));
   }
 

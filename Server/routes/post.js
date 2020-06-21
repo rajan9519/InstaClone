@@ -50,23 +50,19 @@ router.get("/", loggedIn, (req, res) => {
   //     console.log(err);
   //   });
 
-  gfs.files.find().toArray((err, files) => {
-    // Check if files
-    if (!files || files.length === 0) {
-      res.render("index", { files: false });
+  // gfs.files.find().toArray((err, files) => {
+  //   // Check if files
+
+  //   res.json(files);
+  // });
+
+  Post.find({}, (err, posts) => {
+    if (err) {
+      return res.json({ error: "Unable to find the post" });
     } else {
-      files.map((file) => {
-        if (
-          file.contentType === "image/jpeg" ||
-          file.contentType === "image/png"
-        ) {
-          file.isImage = true;
-        } else {
-          file.isImage = false;
-        }
-      });
-      res.json(files);
+      res.send(posts);
     }
+    console.log("post requested and sent succesfully");
   });
 });
 
@@ -106,8 +102,8 @@ router.post("/createPost", loggedIn, upload.single("file"), (req, res) => {
   const post = new Post({
     title,
     body,
-    postedBy: req.user,
-    photo: req.filename,
+    postedBy: JSON.stringify(req.user),
+    fileName: req.filename,
   });
 
   post
@@ -119,6 +115,36 @@ router.post("/createPost", loggedIn, upload.single("file"), (req, res) => {
       console.log(err);
     });
   console.log("succesully uploaded image");
+});
+
+const Like = mongoose.model("Like");
+router.put("/createPost", loggedIn, (req, res) => {
+  const like = new Like({
+    postId: req.body.postId,
+    likedBy: req.body.userId,
+  });
+
+  like
+    .save()
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  Post.findByIdAndUpdate(
+    { _id: req.body.postId },
+    { $inc: { numLikes: 1 } },
+    { new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(500).send(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
 });
 
 router.get("/myposts", loggedIn, (req, res) => {
