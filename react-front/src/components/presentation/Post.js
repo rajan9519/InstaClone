@@ -12,7 +12,7 @@ const Post = (props) => {
   const [likes, setLikes] = useState(props.likes);
 
   const handleLike = () => {
-    fetch("/post/createPost", {
+    fetch("/post/like", {
       method: "put",
       body: JSON.stringify({
         postId,

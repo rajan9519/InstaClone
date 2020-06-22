@@ -118,7 +118,7 @@ router.post("/createPost", loggedIn, upload.single("file"), (req, res) => {
 });
 
 const Like = mongoose.model("Like");
-router.put("/createPost", loggedIn, (req, res) => {
+router.put("/like", loggedIn, (req, res) => {
   const like = new Like({
     postId: req.body.postId,
     likedBy: req.body.userId,
