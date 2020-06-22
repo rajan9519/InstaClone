@@ -10,8 +10,11 @@ const Post = (props) => {
   const [postId, setPostId] = useState(props.postId);
   const [userId, setUserId] = useState(props.userId);
   const [likes, setLikes] = useState(props.likes);
+  const [comments, setComments] = useState(props.comments);
+  const [text, setText] = useState("");
 
-  const handleLike = () => {
+  const handleLike = (e) => {
+    e.preventDefault();
     fetch("/post/like", {
       method: "put",
       body: JSON.stringify({
@@ -34,6 +37,34 @@ const Post = (props) => {
 
     console.log("liked");
   };
+
+  const handleComment = (e) => {
+    e.preventDefault();
+    fetch("/post/comment", {
+      method: "put",
+      body: JSON.stringify({
+        postId,
+        userId: JSON.parse(localStorage.getItem("user"))._id,
+        text,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setComments(data.numComments);
+        setText("");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    console.log("commented");
+  };
+
   return (
     <div
       style={{
@@ -66,8 +97,8 @@ const Post = (props) => {
           <div style={{ display: "flex" }}>
             <span>
               <button
-                onClick={() => {
-                  handleLike();
+                onClick={(e) => {
+                  handleLike(e);
                 }}
               >
                 <img src={icons.images.heartIcon}></img>
@@ -96,7 +127,7 @@ const Post = (props) => {
         <div>
           <div>
             <a>
-              "View all "<span>26</span>" comments"
+              "View all "<span>{comments}</span>" comments"
             </a>
           </div>
         </div>
@@ -106,8 +137,17 @@ const Post = (props) => {
         <section>
           <div>
             <form>
-              <textarea></textarea>
-              <button>sumbit</button>
+              <textarea
+                placeholder="text"
+                value={text}
+                name="text"
+                onChange={(e) => {
+                  setText(e.target.value);
+                }}
+              ></textarea>
+              <button disabled={!text} onClick={(e) => handleComment(e)}>
+                post
+              </button>
             </form>
           </div>
         </section>

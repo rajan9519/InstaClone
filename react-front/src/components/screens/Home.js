@@ -31,6 +31,7 @@ const Home = () => {
         filename={post.fileName}
         name={JSON.parse(post.postedBy).name}
         likes={post.numLikes}
+        comments={post.numComments}
         postId={post._id}
         userId={JSON.parse(post.postedBy)._id}
         key={post._id}

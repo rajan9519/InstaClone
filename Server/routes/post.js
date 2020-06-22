@@ -128,23 +128,54 @@ router.put("/like", loggedIn, (req, res) => {
     .save()
     .then((result) => {
       console.log(result);
+
+      Post.findByIdAndUpdate(
+        { _id: req.body.postId },
+        { $inc: { numLikes: 1 } },
+        { new: true },
+        (err, result) => {
+          if (err) {
+            return res.status(500).send(err);
+          } else {
+            res.send(result);
+          }
+        }
+      );
     })
     .catch((err) => {
       console.log(err);
     });
+});
 
-  Post.findByIdAndUpdate(
-    { _id: req.body.postId },
-    { $inc: { numLikes: 1 } },
-    { new: true },
-    (err, result) => {
-      if (err) {
-        return res.status(500).send(err);
-      } else {
-        res.send(result);
-      }
-    }
-  );
+const Comment = mongoose.model("Comment");
+router.put("/comment", loggedIn, (req, res) => {
+  const comment = new Comment({
+    commentBy: req.body.userId,
+    commentOn: req.body.postId,
+    comment: req.body.text,
+  });
+
+  comment
+    .save()
+    .then((result) => {
+      console.log(result);
+
+      Post.findByIdAndUpdate(
+        { _id: req.body.postId },
+        { $inc: { numComments: 1 } },
+        { new: true },
+        (err, result) => {
+          if (err) {
+            return res.status(500).send(err);
+          } else {
+            res.send(result);
+          }
+        }
+      );
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 router.get("/myposts", loggedIn, (req, res) => {
