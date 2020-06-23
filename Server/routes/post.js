@@ -9,6 +9,11 @@ const Grid = require("gridfs-stream");
 const loggedIn = require("../middleware/loggedIn");
 const mongoURI = require("../keys").MONGO_URL;
 
+const Post = mongoose.model("Post");
+const Like = mongoose.model("Like");
+const Comment = mongoose.model("Comment");
+const Follow = mongoose.model("Follow");
+
 const conn = mongoose.createConnection(mongoURI);
 
 let gfs;
@@ -39,7 +44,6 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage });
 
-const Post = mongoose.model("Post");
 router.get("/", loggedIn, (req, res) => {
   // Post.find()
   //   .populate("postedBy", "_id name")
@@ -56,10 +60,34 @@ router.get("/", loggedIn, (req, res) => {
   //   res.json(files);
   // });
 
+  const isLiked = (post) => {
+    Like.find(
+      { likedBy: req.headers.userId, postId: post._id },
+      (err, liked) => {
+        if (err) {
+          return res.json({ error: "unable to find likes by the user" });
+        } else {
+          if (liked) {
+            post.isLiked = true;
+          } else {
+            post.isLiked = false;
+          }
+          console.log("mapping");
+        }
+      }
+    );
+  };
+
   Post.find({}, (err, posts) => {
     if (err) {
       return res.json({ error: "Unable to find the post" });
     } else {
+      posts.map((post) => {
+        isLiked(post);
+        console.log("data mapped");
+        return post;
+      });
+      console.log("data is send");
       res.send(posts);
     }
     console.log("post requested and sent succesfully");
@@ -117,7 +145,6 @@ router.post("/createPost", loggedIn, upload.single("file"), (req, res) => {
   console.log("succesully uploaded image");
 });
 
-const Like = mongoose.model("Like");
 router.put("/like", loggedIn, (req, res) => {
   const like = new Like({
     postId: req.body.postId,
@@ -147,7 +174,6 @@ router.put("/like", loggedIn, (req, res) => {
     });
 });
 
-const Comment = mongoose.model("Comment");
 router.put("/comment", loggedIn, (req, res) => {
   const comment = new Comment({
     commentBy: req.body.userId,
@@ -176,6 +202,30 @@ router.put("/comment", loggedIn, (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+});
+
+router.post("/follow", loggedIn, (req, res) => {
+  const { followerId, followeeId } = req.body;
+
+  Follow.findOne({ followerId, followeeId }).then((alreadyFollowed) => {
+    if (alreadyFollowed) {
+      res.json({ error: "You have already followed this user" });
+      return;
+    }
+
+    const follow = new Follow({
+      followerId,
+      followeeId,
+    });
+    follow
+      .save()
+      .then((follow) => {
+        res.json({ message: "followed succesfully" });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 });
 
 router.get("/myposts", loggedIn, (req, res) => {
