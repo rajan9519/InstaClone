@@ -9,7 +9,11 @@ const Home = () => {
   useEffect(() => {
     fetch("/post", {
       method: "get",
-      headers: { authorization: localStorage.getItem("token") },
+      "Content-Type": "application/json",
+      headers: {
+        authorization: localStorage.getItem("token"),
+        userId: JSON.parse(localStorage.getItem("user"))._id,
+      },
     })
       .then((res) => res.json())
       .then((data) => {

@@ -100,17 +100,18 @@ const Post = (props) => {
                 onClick={(e) => {
                   handleLike(e);
                 }}
+                style={{ backgroundColor: "none" }}
               >
                 <img src={icons.images.heartIcon}></img>
               </button>
             </span>
             <span>
-              <button>
+              <button style={{ border: "none" }}>
                 <img src={icons.images.chatIcon}></img>
               </button>
             </span>
             <span>
-              <button style={{ float: "auto" }}>
+              <button style={{ border: "none" }}>
                 <img src={icons.images.arrowIcon}></img>
               </button>
             </span>
