@@ -148,7 +148,7 @@ router.get("/image/:filename", (req, res) => {
 });
 
 router.post("/createPost", loggedIn, upload.single("file"), (req, res) => {
-  const { title, body } = req.body;
+  const { title, body, userId } = req.body;
   if (!title || !body) {
     res.status(422).json({ error: "Please add all the fields" });
     return;
@@ -156,7 +156,7 @@ router.post("/createPost", loggedIn, upload.single("file"), (req, res) => {
   const post = new Post({
     title,
     body,
-    postedBy: req.headers.userid,
+    postedBy: userId,
     fileName: req.filename,
   });
 
@@ -252,38 +252,4 @@ router.put("/comment", loggedIn, (req, res) => {
     });
 });
 
-router.post("/follow", loggedIn, (req, res) => {
-  const { followerId, followeeId } = req.body;
-
-  Follow.findOne({ followerId, followeeId }).then((alreadyFollowed) => {
-    if (alreadyFollowed) {
-      res.json({ error: "You have already followed this user" });
-      return;
-    }
-
-    const follow = new Follow({
-      followerId,
-      followeeId,
-    });
-    follow
-      .save()
-      .then((follow) => {
-        res.json({ message: "followed succesfully" });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-});
-
-router.get("/myposts", loggedIn, (req, res) => {
-  Post.find({ postedBy: req.headers.userid })
-    .populate("postedBy", "_id name")
-    .then((myposts) => {
-      res.send(myposts);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
 module.exports = router;

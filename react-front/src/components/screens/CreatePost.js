@@ -11,12 +11,14 @@ const CreatePost = () => {
     formData.append("file", image);
     formData.append("title", title);
     formData.append("body", body);
+    formData.append("userId", JSON.parse(localStorage.getItem("user"))._id);
 
     fetch("/post/createPost", {
       method: "post",
       body: formData,
-      headers: { authorization: localStorage.getItem("token") },
-      userid: JSON.parse(localStorage.getItem("user"))._id,
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
     })
       .then((res) => res.json())
       .then((data) => {

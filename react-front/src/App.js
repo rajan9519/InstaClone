@@ -33,7 +33,7 @@ const Routing = () => {
       <Route exact path="/">
         <Home />
       </Route>
-      <Route exact path="/profile">
+      <Route path="/profile/:userId">
         <Profile />
       </Route>
       <Route exact path="/createpost">

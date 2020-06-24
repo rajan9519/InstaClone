@@ -1,9 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../App";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
   const { state } = useContext(AuthContext);
   const user = JSON.parse(state.user);
+  const { userId } = useParams();
+  console.log(userId);
 
   const [posts, setPosts] = useState("");
   const [follower, setFollower] = useState(0);
@@ -12,8 +15,8 @@ const Profile = () => {
 
   let allpost;
   useEffect(() => {
-    const url = "/user/" + user._id;
-    fetch(url, {
+    const url123 = "/user/" + userId;
+    fetch(url123, {
       method: "get",
       headers: {
         authorization: state.token,
@@ -30,6 +33,7 @@ const Profile = () => {
       })
       .catch((err) => {
         console.log(err);
+        console.log("error somewhere");
       });
   }, []);
   return (
