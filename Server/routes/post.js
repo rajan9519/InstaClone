@@ -7,6 +7,7 @@ const crypto = require("crypto");
 const GridFsStorage = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
 const loggedIn = require("../middleware/loggedIn");
+const { resolve } = require("path");
 const mongoURI = require("../keys").MONGO_URL;
 
 const Post = mongoose.model("Post");
@@ -45,6 +46,7 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 router.get("/", loggedIn, (req, res) => {
+  console.log(req.headers);
   // Post.find()
   //   .populate("postedBy", "_id name")
   //   .then((posts) => {
@@ -59,36 +61,49 @@ router.get("/", loggedIn, (req, res) => {
 
   //   res.json(files);
   // });
-
-  const isLiked = (post) => {
-    Like.find(
-      { likedBy: req.headers.userId, postId: post._id },
-      (err, liked) => {
-        if (err) {
-          return res.json({ error: "unable to find likes by the user" });
-        } else {
-          if (liked) {
+  const liked = (post) => {
+    return new Promise((resolve, reject) => {
+      Like.find(
+        { likedBy: req.headers.userid, postId: post._id },
+        (err, liked) => {
+          console.log(liked);
+          if (err) {
+            reject(err);
+          }
+          if (liked.length) {
             post.isLiked = true;
+            resolve(post);
           } else {
             post.isLiked = false;
+            resolve(post);
           }
-          console.log("mapping");
         }
-      }
-    );
+      );
+    });
+  };
+
+  const handleLike = (posts) => {
+    return Promise.all(
+      posts.map((post) => {
+        return liked(post);
+      })
+    )
+      .then((data) => {
+        console.log(data);
+        return data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   Post.find({}, (err, posts) => {
     if (err) {
       return res.json({ error: "Unable to find the post" });
     } else {
-      posts.map((post) => {
-        isLiked(post);
-        console.log("data mapped");
-        return post;
+      handleLike(posts).then((data) => {
+        res.send(data);
       });
-      console.log("data is send");
-      res.send(posts);
     }
     console.log("post requested and sent succesfully");
   });

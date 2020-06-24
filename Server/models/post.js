@@ -24,6 +24,10 @@ const postSchema = new mongoose.Schema({
   postedBy: {
     type: String,
   },
+  isLiked: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 mongoose.model("Post", postSchema);

@@ -12,7 +12,7 @@ const Home = () => {
       "Content-Type": "application/json",
       headers: {
         authorization: localStorage.getItem("token"),
-        userId: JSON.parse(localStorage.getItem("user"))._id,
+        userid: JSON.parse(localStorage.getItem("user"))._id,
       },
     })
       .then((res) => res.json())
@@ -38,6 +38,7 @@ const Home = () => {
         comments={post.numComments}
         postId={post._id}
         userId={JSON.parse(post.postedBy)._id}
+        isLiked={post.isLiked}
         key={post._id}
       />
     ));
