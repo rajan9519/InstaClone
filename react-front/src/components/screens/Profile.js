@@ -12,11 +12,11 @@ const Profile = () => {
 
   let allpost;
   useEffect(() => {
-    fetch("/post/myposts", {
+    const url = "/user/" + user._id;
+    fetch(url, {
       method: "get",
       headers: {
         authorization: state.token,
-        userid: user._id,
       },
     })
       .then((res) => res.json())

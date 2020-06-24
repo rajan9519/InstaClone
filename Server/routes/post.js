@@ -7,7 +7,6 @@ const crypto = require("crypto");
 const GridFsStorage = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
 const loggedIn = require("../middleware/loggedIn");
-const { resolve } = require("path");
 const mongoURI = require("../keys").MONGO_URL;
 
 const Post = mongoose.model("Post");
