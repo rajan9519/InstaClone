@@ -161,32 +161,54 @@ router.post("/createPost", loggedIn, upload.single("file"), (req, res) => {
 });
 
 router.put("/like", loggedIn, (req, res) => {
-  const like = new Like({
-    postId: req.body.postId,
-    likedBy: req.body.userId,
-  });
-
-  like
-    .save()
-    .then((result) => {
-      console.log(result);
-
-      Post.findByIdAndUpdate(
-        { _id: req.body.postId },
-        { $inc: { numLikes: 1 } },
-        { new: true },
-        (err, result) => {
-          if (err) {
-            return res.status(500).send(err);
-          } else {
-            res.send(result);
-          }
-        }
-      );
-    })
-    .catch((err) => {
-      console.log(err);
+  const { postId, userId, isLiked } = req.body;
+  if (!isLiked) {
+    const like = new Like({
+      postId: postId,
+      likedBy: userId,
     });
+
+    like
+      .save()
+      .then((result) => {
+        console.log(result);
+
+        Post.findByIdAndUpdate(
+          { _id: postId },
+          { $inc: { numLikes: 1 }, $set: { isLiked: true } },
+          { new: true },
+          (err, result) => {
+            if (err) {
+              return res.status(500).send(err);
+            } else {
+              res.send(result);
+            }
+          }
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    Like.deleteOne({ likedBy: userId, postId }, (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        Post.findByIdAndUpdate(
+          { _id: postId },
+          { $inc: { numLikes: -1 }, $set: { isLiked: false } },
+          { new: true },
+          (err, result) => {
+            if (err) {
+              return res.status(500).send(err);
+            } else {
+              res.send(result);
+            }
+          }
+        );
+      }
+    });
+  }
 });
 
 router.put("/comment", loggedIn, (req, res) => {

@@ -12,14 +12,17 @@ const Post = (props) => {
   const [likes, setLikes] = useState(props.likes);
   const [comments, setComments] = useState(props.comments);
   const [text, setText] = useState("");
+  const [isLiked, setIsLiked] = useState(props.isLiked);
 
   const handleLike = (e) => {
     e.preventDefault();
+    setIsLiked(!isLiked);
     fetch("/post/like", {
       method: "put",
       body: JSON.stringify({
         postId,
         userId: JSON.parse(localStorage.getItem("user"))._id,
+        isLiked,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -30,6 +33,7 @@ const Post = (props) => {
       .then((data) => {
         console.log(data);
         setLikes(data.numLikes);
+        setIsLiked(data.isLiked);
       })
       .catch((err) => {
         console.log(err);
@@ -100,7 +104,7 @@ const Post = (props) => {
                 onClick={(e) => {
                   handleLike(e);
                 }}
-                style={{ backgroundColor: props.isLiked ? "red" : null }}
+                style={{ backgroundColor: isLiked ? "red" : null }}
               >
                 <img src={icons.images.heartIcon}></img>
               </button>
