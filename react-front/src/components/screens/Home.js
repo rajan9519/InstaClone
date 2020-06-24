@@ -12,7 +12,9 @@ const Home = () => {
       "Content-Type": "application/json",
       headers: {
         authorization: localStorage.getItem("token"),
-        userid: JSON.parse(localStorage.getItem("user"))._id,
+        userid: localStorage.getItem("user")
+          ? JSON.parse(localStorage.getItem("user"))._id
+          : null,
       },
     })
       .then((res) => res.json())
@@ -33,11 +35,11 @@ const Home = () => {
     allPosts = posts.map((post) => (
       <Post
         filename={post.fileName}
-        name={JSON.parse(post.postedBy).name}
+        name={post.postedBy.name}
         likes={post.numLikes}
         comments={post.numComments}
         postId={post._id}
-        userId={JSON.parse(post.postedBy)._id}
+        userId={post.postedBy._id}
         isLiked={post.isLiked}
         key={post._id}
       />

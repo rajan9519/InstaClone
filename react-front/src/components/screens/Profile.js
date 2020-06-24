@@ -2,13 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../App";
 
 const Profile = () => {
-  const [posts, setPosts] = useState("");
   const { state } = useContext(AuthContext);
+  const user = JSON.parse(state.user);
+
+  const [posts, setPosts] = useState("");
+  const [follower, setFollower] = useState(0);
+  const [following, setFollowing] = useState(0);
+  const [name, setName] = useState(user.name);
+
   let allpost;
   useEffect(() => {
-    fetch("/post", {
+    fetch("/post/myposts", {
       method: "get",
-      headers: { authorization: state.token },
+      headers: {
+        authorization: state.token,
+        userid: user._id,
+      },
     })
       .then((res) => res.json())
       .then((data) => {
@@ -17,7 +26,7 @@ const Profile = () => {
           return;
         }
         setPosts(data);
-        console.log(posts);
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -47,7 +56,7 @@ const Profile = () => {
               width: "108%",
             }}
           >
-            <h6>im.rajansingh</h6>
+            <h6>{name}</h6>
             <button>Edit Profile</button>
             <button>setting </button>
           </div>
@@ -58,13 +67,13 @@ const Profile = () => {
               width: "108%",
             }}
           >
-            <h6>11 posts</h6>
-            <h6>237 followers</h6>
-            <h6>214 following</h6>
+            <h6>{posts.length}</h6>
+            <h6>{follower}</h6>
+            <h6>{following}</h6>
           </div>
           <div>
             <h6>
-              <b>Rajan Singh</b>
+              <b>{name}</b>
             </h6>
             <h6>VNITian</h6>
             <h6>Rajput</h6>
@@ -85,7 +94,7 @@ const Profile = () => {
             ? posts.map((post) => (
                 <img
                   key={post._id}
-                  src={"/post/image/" + post.filename}
+                  src={"/post/image/" + post.fileName}
                   style={{ width: "30%", margin: "10px 10px" }}
                 />
               ))

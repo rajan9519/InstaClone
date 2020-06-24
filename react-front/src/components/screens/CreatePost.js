@@ -16,7 +16,7 @@ const CreatePost = () => {
       method: "post",
       body: formData,
       headers: { authorization: localStorage.getItem("token") },
-      user: JSON.parse(localStorage.getItem("user")),
+      userid: JSON.parse(localStorage.getItem("user"))._id,
     })
       .then((res) => res.json())
       .then((data) => {

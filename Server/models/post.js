@@ -22,7 +22,8 @@ const postSchema = new mongoose.Schema({
     default: 0,
   },
   postedBy: {
-    type: String,
+    type: ObjectId,
+    ref: "User",
   },
   isLiked: {
     type: Boolean,

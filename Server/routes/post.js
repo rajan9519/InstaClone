@@ -46,7 +46,6 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 router.get("/", loggedIn, (req, res) => {
-  console.log(req.headers);
   // Post.find()
   //   .populate("postedBy", "_id name")
   //   .then((posts) => {
@@ -97,16 +96,29 @@ router.get("/", loggedIn, (req, res) => {
       });
   };
 
-  Post.find({}, (err, posts) => {
-    if (err) {
-      return res.json({ error: "Unable to find the post" });
-    } else {
-      handleLike(posts).then((data) => {
-        res.send(data);
-      });
-    }
-    console.log("post requested and sent succesfully");
-  });
+  // Post.find({}, (err, posts) => {
+  //   if (err) {
+  //     return res.json({ error: "Unable to find the post" });
+  //   } else {
+  //     handleLike(posts).then((data) => {
+  //       res.send(data);
+  //     });
+  //   }
+  //   console.log("post requested and sent succesfully");
+  // });
+
+  Post.find()
+    .populate("postedBy", "_id name")
+    .exec((err, posts) => {
+      if (err) {
+        return res.json({ error: "Unable to find the post" });
+      } else {
+        handleLike(posts).then((data) => {
+          res.send(data);
+        });
+      }
+      console.log("post requested and sent succesfully");
+    });
 });
 
 router.get("/test/:filename", (req, res) => {
@@ -145,7 +157,7 @@ router.post("/createPost", loggedIn, upload.single("file"), (req, res) => {
   const post = new Post({
     title,
     body,
-    postedBy: JSON.stringify(req.user),
+    postedBy: req.headers.userid,
     fileName: req.filename,
   });
 
@@ -266,10 +278,10 @@ router.post("/follow", loggedIn, (req, res) => {
 });
 
 router.get("/myposts", loggedIn, (req, res) => {
-  Post.find({ postedBy: req.user._id })
+  Post.find({ postedBy: req.headers.userid })
     .populate("postedBy", "_id name")
     .then((myposts) => {
-      res.json({ myposts });
+      res.send(myposts);
     })
     .catch((err) => {
       console.log(err);

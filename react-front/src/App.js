@@ -23,9 +23,7 @@ const Routing = () => {
   const { state, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
-    if (state.isAuthenticated) {
-      history.push("/");
-    } else {
+    if (!state.isAuthenticated) {
       history.push("/signin");
     }
     console.log("state changed");
