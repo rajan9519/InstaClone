@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  dp: {
+    type: String,
+    default:
+      "https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png",
+  },
 });
 
 mongoose.model("User", userSchema);

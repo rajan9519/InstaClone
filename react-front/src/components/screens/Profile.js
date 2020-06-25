@@ -14,6 +14,7 @@ const Profile = () => {
   const [name, setName] = useState("");
   const [myProfile, setMyProfile] = useState(userId === state.user._id);
   const [ifollow, setIfollow] = useState("");
+  const [dp, setDp] = useState("");
 
   useEffect(() => {
     console.log(userId);
@@ -32,6 +33,7 @@ const Profile = () => {
         }
         setPosts(data.userPost);
         setUser(data.user);
+        setDp(data.user.dp);
         setName(data.user.name);
         setFollower(data.user.follower);
         setFollowing(data.user.followee);
@@ -105,7 +107,7 @@ const Profile = () => {
       >
         <div>
           <img
-            src="https://instagram.fjai1-2.fna.fbcdn.net/v/t51.2885-19/s320x320/79967735_514903752444934_1105358873562185728_n.jpg?_nc_ht=instagram.fjai1-2.fna.fbcdn.net&_nc_ohc=tJTC28-_B6YAX9IxN5y&oh=d89568e3f4ed5c6389ac9ec8beea0729&oe=5F12AFDB"
+            src={"/post/image/" + dp}
             style={{ width: "150px", height: "150px", borderRadius: "75px" }}
           />
         </div>

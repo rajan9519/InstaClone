@@ -5,6 +5,7 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [image, setImage] = useState(undefined);
 
   const validateEmail = (email) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -13,16 +14,19 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+
     fetch("/signup", {
       method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        password,
-        email,
-      }),
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
+      body: formData,
     })
       .then((res) => res.json())
       .then((data) => {
@@ -75,6 +79,15 @@ const SignUp = () => {
             name="password"
             onChange={(e) => handleChange(e)}
           />
+          <input
+            type="file"
+            name="image"
+            placeholder="Descrition"
+            onChange={(e) => {
+              setImage(e.target.files[0]);
+            }}
+          />
+          <button type="submit">Submit</button>
           <button
             className="btn waves-effect waves-light #2196f3 blue"
             type="submit"
