@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../App";
 
 const AfterSign = () => {
-  const { state, dispatch } = useContext(AuthContext);
-  const url = "/profile/" + JSON.parse(state.user)._id;
+  const { state } = useContext(AuthContext);
+  const url = "/profile/" + state.user._id;
   return (
     <div>
       <li>

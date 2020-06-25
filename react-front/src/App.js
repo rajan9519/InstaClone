@@ -14,7 +14,7 @@ import { reducer } from "./reducer/authReducer";
 export const AuthContext = createContext();
 export const initialState = {
   isAuthenticated: localStorage.getItem("isAuthenticated"),
-  user: localStorage.getItem("user"),
+  user: JSON.parse(localStorage.getItem("user")),
   token: localStorage.getItem("token"),
 };
 
@@ -23,10 +23,12 @@ const Routing = () => {
   const { state, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
-    if (!state.isAuthenticated) {
+    if (state.isAuthenticated) {
+      history.push("/");
+    } else {
       history.push("/signin");
     }
-    console.log("state changed");
+    console.log("state changed", state.user);
   }, [state]);
   return (
     <Switch>

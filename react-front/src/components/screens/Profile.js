@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 const Profile = () => {
   const { state } = useContext(AuthContext);
-  const user = JSON.parse(state.user);
+  const user = state.user;
   const { userId } = useParams();
   console.log(userId);
 
@@ -14,9 +14,11 @@ const Profile = () => {
   const [name, setName] = useState(user.name);
 
   let allpost;
+
   useEffect(() => {
-    const url123 = "/user/" + userId;
-    fetch(url123, {
+    console.log(userId);
+    const url = "/user/" + userId;
+    fetch(url, {
       method: "get",
       headers: {
         authorization: state.token,
