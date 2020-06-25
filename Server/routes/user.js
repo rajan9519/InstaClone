@@ -8,16 +8,25 @@ const Post = mongoose.model("Post");
 const Like = mongoose.model("Like");
 const Comment = mongoose.model("Comment");
 const Follow = mongoose.model("Follow");
+const User = mongoose.model("User");
 
 router.get("/:id", loggedIn, (req, res) => {
   console.log("routing");
-  Post.find({ postedBy: req.params.id })
-    .populate("postedBy", "_id name")
-    .then((userPost) => {
-      res.send(userPost);
-    })
-    .catch((err) => {
-      console.log(err);
+  User.findById(req.params.id)
+    .select("-password")
+    .exec((err, user) => {
+      if (err) {
+        console.log("some database error");
+      } else {
+        Post.find({ postedBy: req.params.id })
+          .populate("postedBy", "_id name")
+          .then((userPost) => {
+            res.json({ user, userPost });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     });
 });
 

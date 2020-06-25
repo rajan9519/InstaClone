@@ -4,16 +4,14 @@ import { useParams } from "react-router-dom";
 
 const Profile = () => {
   const { state } = useContext(AuthContext);
-  const user = state.user;
   const { userId } = useParams();
   console.log(userId);
 
   const [posts, setPosts] = useState("");
+  const [user, setUser] = useState(null);
   const [follower, setFollower] = useState(0);
   const [following, setFollowing] = useState(0);
-  const [name, setName] = useState(user.name);
-
-  let allpost;
+  const [name, setName] = useState("");
 
   useEffect(() => {
     console.log(userId);
@@ -30,14 +28,16 @@ const Profile = () => {
           console.log(data.error);
           return;
         }
-        setPosts(data);
-        console.log(data);
+        setPosts(data.userPost);
+        setUser(data.user);
+        setName(data.user.name);
+        console.log(name);
       })
       .catch((err) => {
         console.log(err);
         console.log("error somewhere");
       });
-  }, []);
+  }, [userId]);
   return (
     <div>
       <div

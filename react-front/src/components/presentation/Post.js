@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import icons from "../../assets";
+import { Link } from "react-router-dom";
 
 const Post = (props) => {
   const url = "/post/image/" + props.filename;
@@ -88,7 +89,7 @@ const Post = (props) => {
             src={url}
             style={{ width: "35px", height: "35px", borderRadius: "17px" }}
           />
-          <h6>{userName}</h6>
+          <Link to={"/profile/" + userId}>{userName}</Link>
         </div>
         <img
           src={url}
