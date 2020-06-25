@@ -1,4 +1,10 @@
-import React, { createContext, useReducer, useContext, useEffect } from "react";
+import React, {
+  createContext,
+  useReducer,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { BrowserRouter, Route, useHistory, Switch } from "react-router-dom";
 import "./App.css";
 import NavBar from "./components/NavBar";
@@ -21,15 +27,20 @@ export const initialState = {
 const Routing = () => {
   const history = useHistory();
   const { state, dispatch } = useContext(AuthContext);
+  const { auth, setAuth } = useState(state.isAuthenticated);
 
   useEffect(() => {
+    console.log(window.location.pathname);
     if (state.isAuthenticated) {
-      history.push("/");
+      if (window.location.pathname === "/signin") {
+        history.push("/");
+      }
     } else {
       history.push("/signin");
     }
     console.log("state changed", state.user);
   }, [state]);
+
   return (
     <Switch>
       <Route exact path="/">
