@@ -31,14 +31,39 @@ router.get("/:id", loggedIn, (req, res) => {
 });
 
 router.post("/follow", loggedIn, (req, res) => {
-  const { followerId, followeeId } = req.body;
-
-  Follow.findOne({ followerId, followeeId }).then((alreadyFollowed) => {
-    if (alreadyFollowed) {
-      res.json({ error: "You have already followed this user" });
-      return;
-    }
-
+  const { followerId, followeeId, unfollow } = req.body;
+  if (unfollow) {
+    Follow.deleteOne({ followerId, followeeId }, (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        User.findByIdAndUpdate(
+          followerId,
+          { $inc: { followee: -1 } },
+          { new: true },
+          (err, result) => {
+            if (err) {
+              return res.status(500).send(err);
+            } else {
+              // res.send(result);
+              User.findByIdAndUpdate(
+                followeeId,
+                { $inc: { follower: -1 } },
+                { new: true },
+                (err, result) => {
+                  if (err) {
+                    return res.status(500).send(err);
+                  } else {
+                    res.send(result);
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+    });
+  } else {
     const follow = new Follow({
       followerId,
       followeeId,
@@ -46,11 +71,47 @@ router.post("/follow", loggedIn, (req, res) => {
     follow
       .save()
       .then((follow) => {
-        res.json({ message: "followed succesfully" });
+        User.findByIdAndUpdate(
+          followerId,
+          { $inc: { followee: 1 } },
+          { new: true },
+          (err, result) => {
+            if (err) {
+              res.json({ error: err });
+              return;
+            } else {
+              User.findByIdAndUpdate(
+                followeeId,
+                { $inc: { follower: 1 } },
+                { new: true },
+                (err, result) => {
+                  if (err) {
+                    res.json({ error: err });
+                    return;
+                  } else {
+                    res.send(result);
+                  }
+                }
+              );
+            }
+          }
+        );
       })
       .catch((err) => {
         console.log(err);
       });
+  }
+});
+
+router.post("/ifollow", loggedIn, (req, res) => {
+  console.log(req.body);
+  const { followerId, followeeId } = req.body;
+  Follow.find({ followerId, followeeId }).exec((err, result) => {
+    if (err || !result.length) {
+      res.send(false);
+    } else {
+      res.send(true);
+    }
   });
 });
 

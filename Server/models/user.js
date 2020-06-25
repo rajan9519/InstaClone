@@ -13,6 +13,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  follower: {
+    type: Number,
+    default: 0,
+  },
+  followee: {
+    type: Number,
+    default: 0,
+  },
 });
 
 mongoose.model("User", userSchema);

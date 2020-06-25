@@ -12,6 +12,8 @@ const Profile = () => {
   const [follower, setFollower] = useState(0);
   const [following, setFollowing] = useState(0);
   const [name, setName] = useState("");
+  const [myProfile, setMyProfile] = useState(userId === state.user._id);
+  const [ifollow, setIfollow] = useState("");
 
   useEffect(() => {
     console.log(userId);
@@ -31,13 +33,66 @@ const Profile = () => {
         setPosts(data.userPost);
         setUser(data.user);
         setName(data.user.name);
-        console.log(name);
+        setFollower(data.user.follower);
+        setFollowing(data.user.followee);
+        setMyProfile(userId === state.user._id);
       })
       .catch((err) => {
         console.log(err);
         console.log("error somewhere");
       });
   }, [userId]);
+  useEffect(() => {
+    if (!myProfile) {
+      fetch("/user/ifollow", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: state.token,
+        },
+        body: JSON.stringify({
+          followerId: state.user._id,
+          followeeId: userId,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setIfollow(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [myProfile]);
+
+  const follow = () => {
+    if (!myProfile) {
+      fetch("/user/follow", {
+        method: "post",
+        headers: {
+          authorization: state.token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          followerId: state.user._id,
+          followeeId: userId,
+          unfollow: ifollow,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setFollowing(data.followee);
+          setFollower(data.follower);
+          setIfollow(!ifollow);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.log("i dont know");
+    }
+  };
   return (
     <div>
       <div
@@ -63,7 +118,9 @@ const Profile = () => {
             }}
           >
             <h6>{name}</h6>
-            <button>Edit Profile</button>
+            <button onClick={() => follow()}>
+              {myProfile ? "Edit" : ifollow ? "Unfollow" : "Follow"}
+            </button>
             <button>setting </button>
           </div>
           <div
