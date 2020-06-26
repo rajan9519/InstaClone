@@ -15,6 +15,7 @@ const Profile = () => {
   const [myProfile, setMyProfile] = useState(userId === state.user._id);
   const [ifollow, setIfollow] = useState("");
   const [dp, setDp] = useState("");
+  const [image, setImage] = useState(undefined);
 
   useEffect(() => {
     console.log(userId);
@@ -68,6 +69,29 @@ const Profile = () => {
     }
   }, [myProfile]);
 
+  useEffect(() => {
+    if (image) {
+      const formData = new FormData();
+      formData.append("file", image);
+
+      fetch("/user/uploaddp", {
+        method: "put",
+        headers: {
+          authorization: localStorage.getItem("token"),
+        },
+        body: formData,
+      })
+        .then((res) => res.json)
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log("image changed");
+    }
+  }, [image]);
+
   const follow = () => {
     if (!myProfile) {
       fetch("/user/follow", {
@@ -110,6 +134,23 @@ const Profile = () => {
             src={"/post/image/" + dp}
             style={{ width: "150px", height: "150px", borderRadius: "75px" }}
           />
+          <button
+            onClick={() => {
+              document.getElementById("mydp").click();
+            }}
+          >
+            Change Pic
+          </button>
+          <input
+            id="mydp"
+            type="file"
+            name="image"
+            placeholder="Descrition"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              setImage(e.target.files[0]);
+            }}
+          />
         </div>
         <div>
           <div
@@ -133,8 +174,8 @@ const Profile = () => {
             }}
           >
             <h6>{posts.length}</h6>
-            <h6>{follower}</h6>
-            <h6>{following}</h6>
+            <h6>{follower} follower</h6>
+            <h6>{following} following</h6>
           </div>
           <div>
             <h6>

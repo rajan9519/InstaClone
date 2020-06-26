@@ -1,18 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const path = require("path");
-const multer = require("multer");
-const crypto = require("crypto");
-const GridFsStorage = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
 const loggedIn = require("../middleware/loggedIn");
+const upload = require("../middleware/upload");
 const mongoURI = require("../keys").MONGO_URL;
 
 const Post = mongoose.model("Post");
 const Like = mongoose.model("Like");
 const Comment = mongoose.model("Comment");
-const Follow = mongoose.model("Follow");
 
 const conn = mongoose.createConnection(mongoURI);
 
@@ -22,43 +18,7 @@ conn.once("open", () => {
   gfs.collection("images");
 });
 
-// Create storage engine
-const storage = new GridFsStorage({
-  url: mongoURI,
-  file: (req, file) => {
-    return new Promise((resolve, reject) => {
-      crypto.randomBytes(16, (err, buf) => {
-        if (err) {
-          return reject(err);
-        }
-        const filename = buf.toString("hex") + path.extname(file.originalname);
-        req.filename = filename;
-        const fileInfo = {
-          filename: filename,
-          bucketName: "images",
-        };
-        resolve(fileInfo);
-      });
-    });
-  },
-});
-const upload = multer({ storage });
-
 router.get("/", loggedIn, (req, res) => {
-  // Post.find()
-  //   .populate("postedBy", "_id name")
-  //   .then((posts) => {
-  //     res.json({ posts });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-
-  // gfs.files.find().toArray((err, files) => {
-  //   // Check if files
-
-  //   res.json(files);
-  // });
   const liked = (post) => {
     return new Promise((resolve, reject) => {
       Like.find(

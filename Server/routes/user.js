@@ -1,14 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-
+const Grid = require("gridfs-stream");
 const loggedIn = require("../middleware/loggedIn");
+const upload = require("../middleware/upload");
+const mongoURI = require("../keys").MONGO_URL;
 
 const Post = mongoose.model("Post");
 const Like = mongoose.model("Like");
 const Comment = mongoose.model("Comment");
 const Follow = mongoose.model("Follow");
 const User = mongoose.model("User");
+
+const conn = mongoose.createConnection(mongoURI);
+
+let gfs;
+conn.once("open", () => {
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection("images");
+});
 
 router.get("/:id", loggedIn, (req, res) => {
   console.log("routing");
@@ -29,7 +39,29 @@ router.get("/:id", loggedIn, (req, res) => {
       }
     });
 });
-
+router.put("/uploaddp", loggedIn, upload.single("file"), (req, res) => {
+  console.log(req.user.dp);
+  gfs.remove({ filename: req.user.dp, root: "image" }, (err, result) => {
+    if (err) {
+      return res.json({ error: err });
+    } else {
+      console.log("Successfully deleted ", result);
+      User.findByIdAndUpdate(
+        req.user._id,
+        { $set: { dp: req.filename } },
+        { new: true },
+        (err, result) => {
+          if (err) {
+            return res.json({ error: err });
+          } else {
+            res.send(result);
+            console.log("succesfully updated ");
+          }
+        }
+      );
+    }
+  });
+});
 router.post("/follow", loggedIn, (req, res) => {
   const { followerId, followeeId, unfollow } = req.body;
   if (unfollow) {
