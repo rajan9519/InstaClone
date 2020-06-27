@@ -6,27 +6,37 @@ const AfterSign = () => {
   const { state } = useContext(AuthContext);
   const url = "/profile/" + state.user._id;
   return (
-    <div>
-      <li>
-        <Link to={url}>Profile</Link>
+    <div style={{ display: "flex" }}>
+      <li className="list">
+        <Link className="link" to={url}>
+          Profile
+        </Link>
       </li>
-      <li>
-        <Link to="/createpost">Create Post</Link>
+      <li className="list">
+        <Link className="link" to="/createpost">
+          Create Post
+        </Link>
       </li>
-      <li>
-        <Link to="/signout">Sign Out</Link>
+      <li className="list">
+        <Link className="link" to="/signout">
+          Sign Out
+        </Link>
       </li>
     </div>
   );
 };
 const BeforeSign = () => {
   return (
-    <div>
-      <li>
-        <Link to="/signin">SignIn</Link>
+    <div style={{ display: "flex" }}>
+      <li className="list">
+        <Link className="link" to="/signin">
+          SignIn
+        </Link>
       </li>
-      <li>
-        <Link to="/signup">SignUp</Link>
+      <li className="list">
+        <Link className="link" to="/signup">
+          SignUp
+        </Link>
       </li>
     </div>
   );
@@ -35,7 +45,7 @@ const NavBar = () => {
   const { state, dispatch } = useContext(AuthContext);
   return (
     <nav>
-      <div className="nav-wrapper white">
+      <div className="nav">
         <Link
           to={state.isAuthenticated ? "/" : "/signin"}
           className="brand-logo left"

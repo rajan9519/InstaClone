@@ -83,80 +83,84 @@ const Post = (props) => {
         <div
           style={{
             display: "flex",
+            alignItems: "center",
           }}
         >
           <img
             src={url}
-            style={{ width: "35px", height: "35px", borderRadius: "17px" }}
+            style={{
+              width: "35px",
+              height: "35px",
+              borderRadius: "17px",
+              marginLeft: "5px",
+            }}
           />
-          <Link to={"/profile/" + userId}>{userName}</Link>
+          <Link
+            to={"/profile/" + userId}
+            style={{ marginLeft: "7px", textDecoration: "none" }}
+          >
+            {userName}
+          </Link>
         </div>
-        <img
-          src={url}
-          style={{ width: "35px", height: "35px", borderRadius: "17px" }}
-        />
+        <button className="btn-icon">
+          <i className="material-icons">more_horiz</i>
+        </button>
       </div>
       <img src={url} style={{ width: "100%" }} />
       <div>
-        <section>
-          <div style={{ display: "flex" }}>
-            <span>
-              <button
-                onClick={(e) => {
-                  handleLike(e);
-                }}
-                style={{ backgroundColor: isLiked ? "red" : null }}
-              >
-                <img src={icons.images.heartIcon}></img>
-              </button>
-            </span>
-            <span>
-              <button>
-                <img src={icons.images.chatIcon}></img>
-              </button>
-            </span>
-            <span>
-              <button style={{ border: "none" }}>
-                <img src={icons.images.arrowIcon}></img>
-              </button>
-            </span>
-          </div>
-        </section>
-        <section>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div>
-            <span>
-              <span>{likes}</span>
-              {"Likes "}
-            </span>
+            <button
+              className="btn-icon"
+              onClick={(e) => {
+                handleLike(e);
+              }}
+            >
+              <i
+                className="material-icons"
+                style={{
+                  color: isLiked ? "red" : "black",
+                }}
+              >
+                {isLiked ? "favorite" : "favorite_border"}
+              </i>
+            </button>
+            <button className="btn-icon">
+              <i className="material-icons">comment</i>
+            </button>
           </div>
-        </section>
+          <button className="btn-icon">
+            <i className="material-icons">bookmark_border</i>
+          </button>
+        </div>
+        <div>
+          <span>{likes} Likes</span>
+        </div>
         <div>
           <div>
             <a>
-              "View all "<span>{comments}</span>" comments"
+              View all <span>{comments}</span> comments
             </a>
           </div>
         </div>
         <div>
           <a>1 hours ago</a>
         </div>
-        <section>
-          <div>
-            <form>
-              <textarea
-                placeholder="text"
-                value={text}
-                name="text"
-                onChange={(e) => {
-                  setText(e.target.value);
-                }}
-              ></textarea>
-              <button disabled={!text} onClick={(e) => handleComment(e)}>
-                post
-              </button>
-            </form>
-          </div>
-        </section>
+        <div>
+          <form>
+            <textarea
+              placeholder="text"
+              value={text}
+              name="text"
+              onChange={(e) => {
+                setText(e.target.value);
+              }}
+            ></textarea>
+            <button disabled={!text} onClick={(e) => handleComment(e)}>
+              post
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

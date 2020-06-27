@@ -6,6 +6,9 @@ a {
 .brand-logo,
 h2 {
   font-family: "Grand Hotel", cursive;
+  font-size: 28px;
+  text-decoration: none;
+  margin-left: 10px;
 }
 .mycard {
   margin-top: 30px;
@@ -15,4 +18,29 @@ h2 {
   text-align: center;
   max-width: 400px;
   margin: 10px auto;
+}
+.btn-icon {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+.btn-icon :focus {
+  outline: none !important;
+}
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid grey;
+}
+.list {
+  display: block;
+  margin: auto 10px auto 10px;
+}
+.link {
+  text-decoration: none;
+}
+.dp {
+  display: flex;
+  flex-direction: column;
 }

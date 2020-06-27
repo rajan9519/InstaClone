@@ -129,10 +129,15 @@ const Profile = () => {
           borderBottom: "1px solid grey",
         }}
       >
-        <div>
+        <div className="dp">
           <img
             src={"/post/image/" + dp}
-            style={{ width: "150px", height: "150px", borderRadius: "75px" }}
+            style={{
+              width: "150px",
+              height: "150px",
+              borderRadius: "75px",
+              marginBottom: "10px",
+            }}
           />
           <button
             onClick={() => {
@@ -152,39 +157,43 @@ const Profile = () => {
             }}
           />
         </div>
-        <div>
+        <div style={{ marginLeft: "-33%", fontSize: "25px" }}>
           <div
             style={{
               display: "flex",
               justifyContent: "space-around",
-              width: "108%",
+              width: "110%",
             }}
           >
-            <h6>{name}</h6>
-            <button onClick={() => follow()}>
+            <h6 style={{ margin: "0px 0px 0px 0px" }}>{name}</h6>
+            <button style={{ fontSize: "25px" }} onClick={() => follow()}>
               {myProfile ? "Edit" : ifollow ? "Unfollow" : "Follow"}
             </button>
-            <button>setting </button>
+            <button style={{ fontSize: "25px" }}>setting </button>
           </div>
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               width: "108%",
+              margin: "-5px 0px -45px 0px",
             }}
           >
-            <h6>{posts.length}</h6>
+            <h6>{posts.length} posts</h6>
             <h6>{follower} follower</h6>
             <h6>{following} following</h6>
           </div>
           <div>
-            <h6>
-              <b>{name}</b>
-            </h6>
-            <h6>VNITian</h6>
-            <h6>Rajput</h6>
-            <h6>Positivity King</h6>
-            <h6>Optimistic</h6>
+            <p style={{ marginBottom: "-20px", fontSize: "20px" }}>{name}</p>
+            <p style={{ marginBottom: "-20px", fontSize: "20px" }}>VNITian</p>
+            <p style={{ marginBottom: "-20px", fontSize: "20px" }}>Rajput</p>
+            <p style={{ marginBottom: "-20px", fontSize: "20px" }}>
+              Positivity King
+            </p>
+            <p style={{ marginBottom: "-20px", fontSize: "20px" }}>
+              Optimistic
+            </p>
+            <p></p>
           </div>
         </div>
       </div>
