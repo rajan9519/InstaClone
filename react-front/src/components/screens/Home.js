@@ -42,6 +42,7 @@ const Home = () => {
         userId={post.postedBy._id}
         isLiked={post.isLiked}
         key={post._id}
+        dp={post.postedBy.dp}
       />
     ));
   }

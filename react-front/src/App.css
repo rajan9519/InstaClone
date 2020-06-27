@@ -24,8 +24,8 @@ h2 {
   border: none;
   cursor: pointer;
 }
-.btn-icon :focus {
-  outline: none !important;
+.btn-icon:focus {
+  outline: none;
 }
 .nav {
   display: flex;

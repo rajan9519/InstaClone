@@ -67,7 +67,7 @@ router.get("/", loggedIn, (req, res) => {
   // });
 
   Post.find()
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name dp")
     .exec((err, posts) => {
       if (err) {
         return res.json({ error: "Unable to find the post" });

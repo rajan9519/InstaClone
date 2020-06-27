@@ -40,8 +40,8 @@ router.get("/:id", loggedIn, (req, res) => {
     });
 });
 router.put("/uploaddp", loggedIn, upload.single("file"), (req, res) => {
-  console.log(req.user.dp);
-  gfs.remove({ filename: req.user.dp, root: "image" }, (err, result) => {
+  console.log(gfs.chunks, "chuncks");
+  gfs.files.remove({ filename: req.user.dp }, (err, result) => {
     if (err) {
       return res.json({ error: err });
     } else {
@@ -145,6 +145,16 @@ router.post("/ifollow", loggedIn, (req, res) => {
       res.send(true);
     }
   });
+});
+
+router.post("/:user", loggedIn, (req, res) => {
+  const userPattern = new RegExp("^" + req.params.user);
+  User.find({ email: { $regex: userPattern } })
+    .select("_id name")
+    .then((user) => {
+      res.send(user);
+    })
+    .catch((err) => console.log(err));
 });
 
 module.exports = router;
