@@ -3,4 +3,5 @@ import Profile from "./Profile";
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
 import CreatePost from "./CreatePost";
-export { Home, Profile, SignUp, SignIn, CreatePost };
+import SnackBar from "./SnackBar";
+export { Home, Profile, SignUp, SignIn, CreatePost, SnackBar };

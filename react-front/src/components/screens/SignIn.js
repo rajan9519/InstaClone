@@ -1,12 +1,23 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../../App";
+import SnackBar from "./SnackBar";
 
 const SignIn = () => {
   const { dispatch } = useContext(AuthContext);
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [color, setColor] = useState("");
+
+  useEffect(() => {
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(() => {
+      x.className = x.className.replace("show", "");
+    }, 3000);
+  }, [message, color]);
 
   const handleSignIn = (e) => {
     e.preventDefault();
@@ -23,7 +34,8 @@ const SignIn = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
-          console.log("error signing in");
+          setMessage(data.error);
+          setColor("red");
         } else {
           // localStorage.setItem("token", data.token);
           // localStorage.setItem("user", JSON.stringify(data.user));
@@ -31,6 +43,9 @@ const SignIn = () => {
           // history.push("/");
           // console.log(data);
           // console.log(JSON.parse(localStorage.getItem("user")));
+          setMessage(data.message);
+          setColor("green");
+          DelayNode(3000);
           dispatch({
             type: "SIGNIN",
             payload: data,
@@ -66,6 +81,7 @@ const SignIn = () => {
           </button>
           <Link to="/signup">Don't have an account?</Link>
         </div>
+        <SnackBar message={message} color={color} />
       </form>
     </div>
   );

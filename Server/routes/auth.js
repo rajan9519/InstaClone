@@ -34,7 +34,7 @@ router.post("/signup", (req, res) => {
           user
             .save()
             .then((user) => {
-              res.json({ message: "saved succesfully" });
+              res.json({ message: "Successfully Signed Up" });
             })
             .catch((err) => {
               console.log(err);
@@ -52,11 +52,11 @@ router.post("/signup", (req, res) => {
 router.post("/signin", (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    res.status(422).json({ error: "please provide email or password" });
+    res.status(422).json({ error: "please provide Email and Password" });
   }
   User.findOne({ email }).then((savedUser) => {
     if (!savedUser) {
-      res.status(422).json({ error: "Invalid User or Password" });
+      res.status(422).json({ error: "Invalid Email or Password" });
     }
     bcrypt
       .compare(password, savedUser.password)
@@ -65,9 +65,13 @@ router.post("/signin", (req, res) => {
           // res.json({ message: "User Exist" });
           const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
           savedUser.password = undefined;
-          res.json({ token, user: savedUser });
+          res.json({
+            message: "Successfully Signed In",
+            token,
+            user: savedUser,
+          });
         } else {
-          res.json({ message: "Invalid User Or Password" });
+          res.json({ error: "Invalid Email Or Password" });
         }
       })
       .catch((err) => {

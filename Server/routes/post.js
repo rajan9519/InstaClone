@@ -124,7 +124,7 @@ router.post("/createPost", loggedIn, upload.single("file"), (req, res) => {
   post
     .save()
     .then((result) => {
-      res.json({ post: result });
+      res.json({ post: result, message: "Post Created" });
     })
     .catch((err) => {
       console.log(err);

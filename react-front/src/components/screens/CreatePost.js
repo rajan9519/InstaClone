@@ -63,7 +63,9 @@ const CreatePost = () => {
             setImage(e.target.files[0]);
           }}
         />
-        <button type="submit">Submit</button>
+        <button className="btn" type="submit">
+          Submit
+        </button>
       </form>
     </div>
   );
