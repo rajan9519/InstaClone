@@ -20,47 +20,31 @@ conn.once("open", () => {
   gfs.collection("images");
 });
 
-router.get("/:id", loggedIn, (req, res) => {
-  console.log("routing");
-  User.findById(req.params.id)
-    .select("-password")
-    .exec((err, user) => {
+router.get("/uploaddp", loggedIn, upload.single("file"), (req, res) => {
+  gfs.remove(
+    { _id: mongoose.mongo.ObjectId("5ef5a0d3202f3417ec15c9c3") },
+    (err, result) => {
       if (err) {
-        console.log("some database error");
+        return res.json({ error: err });
       } else {
-        Post.find({ postedBy: req.params.id })
-          .populate("postedBy", "_id name")
-          .then((userPost) => {
-            res.json({ user, userPost });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    });
-});
-router.put("/uploaddp", loggedIn, upload.single("file"), (req, res) => {
-  console.log(gfs.chunks, "chuncks");
-  gfs.files.remove({ filename: req.user.dp }, (err, result) => {
-    if (err) {
-      return res.json({ error: err });
-    } else {
-      console.log("Successfully deleted ", result);
-      User.findByIdAndUpdate(
-        req.user._id,
-        { $set: { dp: req.filename } },
-        { new: true },
-        (err, result) => {
-          if (err) {
-            return res.json({ error: err });
-          } else {
-            res.send(result);
-            console.log("succesfully updated ");
+        console.log("Successfully deleted ", result);
+        res.send("oh yeah");
+        User.findByIdAndUpdate(
+          req.user._id,
+          { $set: { dp: req.filename } },
+          { new: true },
+          (err, result) => {
+            if (err) {
+              return res.json({ error: err });
+            } else {
+              res.send(result);
+              console.log("succesfully updated ");
+            }
           }
-        }
-      );
+        );
+      }
     }
-  });
+  );
 });
 router.post("/follow", loggedIn, (req, res) => {
   const { followerId, followeeId, unfollow } = req.body;
@@ -157,4 +141,22 @@ router.post("/:user", loggedIn, (req, res) => {
     .catch((err) => console.log(err));
 });
 
+router.get("/:id", loggedIn, (req, res) => {
+  User.findById(req.params.id)
+    .select("-password")
+    .exec((err, user) => {
+      if (err) {
+        console.log("some database error");
+      } else {
+        Post.find({ postedBy: req.params.id })
+          .populate("postedBy", "_id name")
+          .then((userPost) => {
+            res.json({ user, userPost });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+});
 module.exports = router;
