@@ -8,6 +8,7 @@ const mongoURI = require("../keys").MONGO_URL;
 // Create storage engine
 const storage = new GridFsStorage({
   url: mongoURI,
+  options: { useNewUrlParser: true, useUnifiedTopology: true },
   file: (req, file) => {
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {
