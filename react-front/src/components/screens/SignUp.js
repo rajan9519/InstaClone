@@ -31,6 +31,7 @@ const SignUp = () => {
   };
 
   const handleChange = (e) => {
+    e.preventDefault();
     const { value, name } = e.target;
     if (name === "email") {
       if (!validateEmail(value)) {
@@ -46,13 +47,13 @@ const SignUp = () => {
     }
   };
   return (
-    <div className="mycard">
+    <div className="signup">
       <form
         onSubmit={(e) => {
           handleSubmit(e);
         }}
       >
-        <div className="card auth-card">
+        <div className="auth-card">
           <h2>Instagram</h2>
           <input
             type="text"
@@ -68,6 +69,7 @@ const SignUp = () => {
             name="email"
             onChange={(e) => handleChange(e)}
           />
+
           <input
             type="password"
             placeholder="password"
@@ -75,10 +77,7 @@ const SignUp = () => {
             name="password"
             onChange={(e) => handleChange(e)}
           />
-          <button
-            className="btn waves-effect waves-light #2196f3 blue"
-            type="submit"
-          >
+          <button className="btn" type="submit">
             SignUp
           </button>
 

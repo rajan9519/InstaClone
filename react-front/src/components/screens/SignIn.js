@@ -45,7 +45,7 @@ const SignIn = () => {
           handleSignIn(e);
         }}
       >
-        <div className="card auth-card">
+        <div className="auth-card">
           <h2>Instagram</h2>
           <input
             type="text"
@@ -61,10 +61,7 @@ const SignIn = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button
-            className="btn waves-effect waves-light #2196f3 blue"
-            type="submit"
-          >
+          <button className="btn" type="submit">
             SignIn
           </button>
           <Link to="/signup">Don't have an account?</Link>
