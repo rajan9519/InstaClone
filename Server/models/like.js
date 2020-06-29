@@ -1,12 +1,11 @@
 const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema.Types;
 const likeSchema = new mongoose.Schema({
   likedBy: {
-    type: ObjectId,
+    type: String,
     ref: "User",
   },
   postId: {
-    type: ObjectId,
+    type: String,
     ref: "Post",
   },
 });

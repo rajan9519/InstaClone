@@ -39,6 +39,7 @@ const Profile = () => {
         setFollower(data.user.follower);
         setFollowing(data.user.followee);
         setMyProfile(userId === state.user._id);
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);
