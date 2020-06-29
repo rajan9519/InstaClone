@@ -20,7 +20,7 @@ conn.once("open", () => {
   gfs.collection("images");
 });
 
-router.get("/uploaddp", loggedIn, upload.single("file"), (req, res) => {
+router.put("/uploaddp", loggedIn, upload.single("file"), (req, res) => {
   gfs.remove(
     { _id: mongoose.mongo.ObjectId("5ef5a0d3202f3417ec15c9c3") },
     (err, result) => {
@@ -158,5 +158,19 @@ router.get("/:id", loggedIn, (req, res) => {
           });
       }
     });
+});
+router.get("/find/:_id", (req, res) => {
+  User.findById(req.params._id).exec((err, user) => {
+    if (err) {
+      console.log(err);
+      return res.json({ error: "internal Server Error" });
+    } else {
+      if (user) {
+        res.json({ error: "Username Already Taken" });
+      } else {
+        res.send({ message: "Username Available" });
+      }
+    }
+  });
 });
 module.exports = router;

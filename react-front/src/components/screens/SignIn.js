@@ -45,7 +45,6 @@ const SignIn = () => {
           // console.log(JSON.parse(localStorage.getItem("user")));
           setMessage(data.message);
           setColor("green");
-          DelayNode(3000);
           dispatch({
             type: "SIGNIN",
             payload: data,

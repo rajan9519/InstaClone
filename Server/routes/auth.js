@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/signup", (req, res) => {
-  const { name, email, password } = req.body;
+  const { _id, name, email, password } = req.body;
   if (!name || !email || !password) {
     res.status(422).json({ error: "please add all the fields" });
     return;
@@ -27,6 +27,7 @@ router.post("/signup", (req, res) => {
         .hash(password, 12)
         .then((hashedPassword) => {
           const user = new User({
+            _id,
             name,
             email,
             password: hashedPassword,
@@ -34,18 +35,21 @@ router.post("/signup", (req, res) => {
           user
             .save()
             .then((user) => {
-              res.json({ message: "Successfully Signed Up" });
+              return res.json({ message: "Successfully Signed Up" });
             })
             .catch((err) => {
               console.log(err);
+              return res.json({ error: err });
             });
         })
         .catch((err) => {
           console.log(err);
+          return res.json({ error: "internal server error" });
         });
     })
     .catch((err) => {
       console.log(err);
+      return res.json({ error: "internal server error" });
     });
 });
 
