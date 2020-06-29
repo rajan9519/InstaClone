@@ -146,16 +146,21 @@ const Post = (props) => {
           <a>1 hours ago</a>
         </div>
         <div>
-          <form>
+          <form className="comment-form">
             <textarea
-              placeholder="text"
+              className="comment"
+              placeholder="Comment"
               value={text}
               name="text"
               onChange={(e) => {
                 setText(e.target.value);
               }}
             ></textarea>
-            <button disabled={!text} onClick={(e) => handleComment(e)}>
+            <button
+              className="btn"
+              disabled={!text}
+              onClick={(e) => handleComment(e)}
+            >
               post
             </button>
           </form>

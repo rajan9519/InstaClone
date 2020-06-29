@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const UserData = (props) => {
   return (
@@ -8,7 +9,9 @@ const UserData = (props) => {
           <img className="profile-pic" src={props.dp}></img>
         </div>
         <div className="user-info">
-          <div className="user-id">{props._id}</div>
+          <Link to={"/profile/" + props._id} className="user-id">
+            {props._id}
+          </Link>
           <div className="user-name">{props.name}</div>
         </div>
       </div>

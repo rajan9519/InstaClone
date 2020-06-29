@@ -78,19 +78,21 @@ const NavBar = () => {
         {!state.isAuthenticated ? <BeforeSign /> : <AfterSign />}
       </div>
       <dialog id="myDialog">
-        this is dialog window
-        <button
-          className="btn-icon"
-          onClick={() => document.getElementById("myDialog").close()}
-        >
-          <i className="material-icons">cancel</i>
-        </button>
-        <input
-          type="text"
-          name="search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value.toLocaleLowerCase())}
-        ></input>
+        <div className="search-bar">
+          <input
+            type="text"
+            name="search"
+            value={search}
+            placeholder="userid"
+            onChange={(e) => setSearch(e.target.value.toLocaleLowerCase())}
+          ></input>
+          <button
+            className="btn-icon"
+            onClick={() => document.getElementById("myDialog").close()}
+          >
+            <i className="material-icons">cancel</i>
+          </button>
+        </div>
         <div>
           {searchRes.length ? (
             <div>
