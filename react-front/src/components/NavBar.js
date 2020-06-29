@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../App";
+import { UserData } from "./presentation";
 
 const AfterSign = (props) => {
   const { state } = useContext(AuthContext);
@@ -95,7 +96,14 @@ const NavBar = () => {
             <div>
               {search
                 ? searchRes.map((user) => {
-                    return <p key={user._id}>{user.name}</p>;
+                    return (
+                      <UserData
+                        key={user._id}
+                        name={user.name}
+                        _id={user._id}
+                        dp={user.dp}
+                      />
+                    );
                   })
                 : null}
             </div>

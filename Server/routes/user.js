@@ -133,8 +133,8 @@ router.post("/ifollow", loggedIn, (req, res) => {
 
 router.post("/:user", loggedIn, (req, res) => {
   const userPattern = new RegExp("^" + req.params.user);
-  User.find({ email: { $regex: userPattern } })
-    .select("_id name")
+  User.find({ _id: { $regex: userPattern } })
+    .select("_id name dp")
     .then((user) => {
       res.send(user);
     })

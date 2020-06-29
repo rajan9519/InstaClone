@@ -130,3 +130,33 @@ input {
     opacity: 0;
   }
 }
+
+.user-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.user-data {
+  display: flex;
+  align-items: center;
+}
+.profile-pic {
+  width: 37px;
+  border-radius: 50%;
+  margin: 12px 10px 7px 6px;
+}
+.user-id {
+  font-weight: bold;
+}
+.user-name {
+  font-weight: lighter;
+  color: grey;
+}
+.user-btn {
+  border-radius: 4px;
+  padding: 5px 12px 5px 12px;
+  outline: none;
+  border: thin;
+  background-color: dodgerblue;
+  cursor: pointer;
+}
