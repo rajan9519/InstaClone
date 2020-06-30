@@ -109,9 +109,13 @@ const Profile = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setFollowing(data.followee);
-          setFollower(data.follower);
-          setIfollow(!ifollow);
+          if (data.error) {
+            window.location.reload(true);
+          } else {
+            setFollowing(data.followee);
+            setFollower(data.follower);
+            setIfollow(!ifollow);
+          }
         })
         .catch((err) => {
           console.log(err);
