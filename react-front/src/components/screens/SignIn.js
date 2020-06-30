@@ -1,22 +1,19 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../../App";
-import SnackBar from "./SnackBar";
+import { show } from "./SnackBar";
 
 const SignIn = () => {
   const { dispatch } = useContext(AuthContext);
-  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [color, setColor] = useState("");
 
   useEffect(() => {
-    var x = document.getElementById("snackbar");
-    x.className = "show";
-    setTimeout(() => {
-      x.className = x.className.replace("show", "");
-    }, 3000);
+    if (message && color) {
+      show(message, color);
+    }
   }, [message, color]);
 
   const handleSignIn = (e) => {
@@ -80,7 +77,6 @@ const SignIn = () => {
           </button>
           <Link to="/signup">Don't have an account?</Link>
         </div>
-        <SnackBar message={message} color={color} />
       </form>
     </div>
   );

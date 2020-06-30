@@ -14,6 +14,8 @@ import {
   Profile,
   SignIn,
   CreatePost,
+  SnackBar,
+  show,
 } from "./components/screens";
 import { reducer } from "./reducer/authReducer";
 
@@ -30,7 +32,6 @@ const Routing = () => {
   const { auth, setAuth } = useState(state.isAuthenticated);
 
   useEffect(() => {
-    console.log(window.location.pathname);
     if (state.isAuthenticated) {
       if (window.location.pathname === "/signin") {
         history.push("/");
@@ -55,6 +56,7 @@ const Routing = () => {
       <Route exact path="/signout">
         <button
           onClick={() => {
+            show("Signed Out", "green");
             dispatch({ type: "SIGNOUT" });
           }}
         >
@@ -82,6 +84,7 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routing />
+        <SnackBar />
       </BrowserRouter>
     </AuthContext.Provider>
   );
