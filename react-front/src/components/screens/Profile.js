@@ -168,7 +168,7 @@ const Profile = () => {
               width: "110%",
             }}
           >
-            <h6 style={{ margin: "0px 0px 0px 0px" }}>{name}</h6>
+            <h6 style={{ margin: "0px 0px 0px 0px" }}>{userId}</h6>
             <button style={{ fontSize: "25px" }} onClick={() => follow()}>
               {myProfile ? "Edit" : ifollow ? "Unfollow" : "Follow"}
             </button>

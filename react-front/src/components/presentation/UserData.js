@@ -4,6 +4,11 @@ import { AuthContext } from "../../App";
 
 const UserData = (props) => {
   const { state, dispatch } = useContext(AuthContext);
+  const [ifollow, setIfollow] = useState(props.ifollow);
+
+  useEffect(() => {
+    setIfollow(props.ifollow);
+  }, [props.ifollow]);
 
   const handleClick = () => {
     fetch("/user/follow", {
@@ -15,12 +20,16 @@ const UserData = (props) => {
       body: JSON.stringify({
         followerId: state.user._id,
         followeeId: props._id,
-        unfollow: props.ifollow,
+        unfollow: ifollow,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        if (data.error) {
+          window.location.reload(true);
+        } else {
+          setIfollow(!ifollow);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -39,8 +48,8 @@ const UserData = (props) => {
           <div className="user-name">{props.name}</div>
         </div>
       </div>
-      <button onClick={() => console.log("clicked")} className="user-btn">
-        {props.ifollow ? "Unfollow" : "Follow"}
+      <button onClick={() => handleClick()} className="user-btn">
+        {ifollow ? "Unfollow" : "Follow"}
       </button>
     </div>
   );
