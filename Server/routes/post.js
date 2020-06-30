@@ -134,53 +134,80 @@ router.post("/createPost", loggedIn, upload.single("file"), (req, res) => {
 
 router.put("/like", loggedIn, (req, res) => {
   const { postId, userId, isLiked } = req.body;
-  if (!isLiked) {
-    const like = new Like({
-      postId: postId,
-      likedBy: userId,
-    });
 
-    like
-      .save()
-      .then((result) => {
-        console.log(result);
-
-        Post.findByIdAndUpdate(
-          { _id: postId },
-          { $inc: { numLikes: 1 }, $set: { isLiked: true } },
-          { new: true },
-          (err, result) => {
-            if (err) {
-              return res.status(500).send(err);
-            } else {
-              res.send(result);
-            }
+  const liked = (userId, postId) => {
+    return new Promise((resolve, reject) => {
+      Like.findOne({ likedBy: userId, postId })
+        .then((data) => {
+          if (data) {
+            resolve(true);
+          } else {
+            resolve(false);
           }
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } else {
-    Like.deleteOne({ likedBy: userId, postId }, (err) => {
-      if (err) {
-        console.log(err);
+        })
+        .catch((err) => {
+          reject(new Error("some Database Error"));
+        });
+    });
+  };
+
+  liked(userId, postId).then((yes) => {
+    if (yes) {
+      if (!isLiked) {
+        return res.json({ error: "Post Already Liked" });
       } else {
-        Post.findByIdAndUpdate(
-          { _id: postId },
-          { $inc: { numLikes: -1 }, $set: { isLiked: false } },
-          { new: true },
-          (err, result) => {
-            if (err) {
-              return res.status(500).send(err);
-            } else {
-              res.send(result);
-            }
+        Like.deleteOne({ likedBy: userId, postId }, (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            Post.findByIdAndUpdate(
+              { _id: postId },
+              { $inc: { numLikes: -1 }, $set: { isLiked: false } },
+              { new: true },
+              (err, result) => {
+                if (err) {
+                  return res.status(500).send(err);
+                } else {
+                  res.send(result);
+                }
+              }
+            );
           }
-        );
+        });
       }
-    });
-  }
+    } else {
+      if (isLiked) {
+        res.json({ error: "Post haven't Liked Yet" });
+      } else {
+        const like = new Like({
+          postId: postId,
+          likedBy: userId,
+        });
+
+        like
+          .save()
+          .then((result) => {
+            console.log(result);
+
+            Post.findByIdAndUpdate(
+              { _id: postId },
+              { $inc: { numLikes: 1 }, $set: { isLiked: true } },
+              { new: true },
+              (err, result) => {
+                if (err) {
+                  return res.status(500).send(err);
+                } else {
+                  res.send(result);
+                }
+              }
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+  });
 });
 
 router.put("/comment", loggedIn, (req, res) => {
