@@ -133,10 +133,34 @@ router.post("/ifollow", loggedIn, (req, res) => {
 
 router.post("/:user", loggedIn, (req, res) => {
   const userPattern = new RegExp("^" + req.params.user);
+
+  const follow = (user) => {
+    return new Promise((resolve, reject) => {
+      Follow.findOne({ followerId: req.user._id, followeeId: user._id })
+        .then((data) => {
+          if (data) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(false);
+        });
+    });
+  };
+
   User.find({ _id: { $regex: userPattern } })
     .select("_id name dp")
     .then((user) => {
-      res.send(user);
+      Promise.all(user.map((user) => follow(user)))
+        .then((data) => {
+          res.json({ user, data });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     })
     .catch((err) => console.log(err));
 });

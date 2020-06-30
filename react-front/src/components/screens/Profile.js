@@ -116,8 +116,6 @@ const Profile = () => {
         .catch((err) => {
           console.log(err);
         });
-    } else {
-      console.log("i dont know");
     }
   };
   return (

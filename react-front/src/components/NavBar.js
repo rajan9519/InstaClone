@@ -51,7 +51,8 @@ const BeforeSign = () => {
 const NavBar = () => {
   const { state, dispatch } = useContext(AuthContext);
   const [search, setSearch] = useState("");
-  const [searchRes, setSearchRes] = useState("");
+  const [users, setUsers] = useState("");
+  const [follow, setFollow] = useState("");
 
   useEffect(() => {
     if (search) {
@@ -60,10 +61,14 @@ const NavBar = () => {
         headers: { authorization: state.token },
       })
         .then((res) => res.json())
-        .then((data) => setSearchRes(data))
+        .then((data) => {
+          setUsers(data.user);
+          setFollow(data.data);
+          console.log(data);
+        })
         .catch((err) => console.log(err));
     } else {
-      setSearchRes([]);
+      setUsers([]);
     }
   }, [search]);
   return (
@@ -80,6 +85,7 @@ const NavBar = () => {
       <dialog id="myDialog">
         <div className="search-bar">
           <input
+            autoComplete="off"
             type="text"
             name="search"
             value={search}
@@ -94,18 +100,21 @@ const NavBar = () => {
           </button>
         </div>
         <div>
-          {searchRes.length ? (
+          {users.length ? (
             <div>
               {search
-                ? searchRes.map((user) => {
-                    return (
-                      <UserData
-                        key={user._id}
-                        name={user.name}
-                        _id={user._id}
-                        dp={user.dp}
-                      />
-                    );
+                ? users.map((user, i) => {
+                    if (user._id !== state.user._id) {
+                      return (
+                        <UserData
+                          key={user._id}
+                          name={user.name}
+                          _id={user._id}
+                          dp={user.dp}
+                          ifollow={follow[i]}
+                        />
+                      );
+                    }
                   })
                 : null}
             </div>
