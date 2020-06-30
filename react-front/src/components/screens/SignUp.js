@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { show } from "./SnackBar";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -7,6 +8,14 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [valid, setValid] = useState(false);
+  const [message, setMessage] = useState("");
+  const [color, setColor] = useState("");
+
+  useEffect(() => {
+    if (message && color) {
+      show(message, color);
+    }
+  }, [message, color]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,12 +34,18 @@ const SignUp = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-          setValid(false);
-          set_id("");
-          setName("");
-          setPassword("");
-          setEmail("");
+          if (data.error) {
+            setMessage(data.error);
+            setColor("red");
+          } else {
+            setMessage(data.message);
+            setColor("green");
+            setValid(false);
+            set_id("");
+            setName("");
+            setPassword("");
+            setEmail("");
+          }
         });
     }
   };
