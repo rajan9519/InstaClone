@@ -131,7 +131,7 @@ router.post("/follow", loggedIn, (req, res) => {
                         res.json({ error: err });
                         return;
                       } else {
-                        res.send(true);
+                        res.json({ ifollow: true, result });
                       }
                     }
                   );
@@ -181,10 +181,10 @@ router.post("/:user", loggedIn, (req, res) => {
 
   User.find({ _id: { $regex: userPattern } })
     .select("_id name dp")
-    .then((user) => {
-      Promise.all(user.map((user) => follow(user)))
+    .then((users) => {
+      Promise.all(users.map((user) => follow(user)))
         .then((data) => {
-          res.json({ user, data });
+          res.json({ users, data });
         })
         .catch((err) => {
           console.log(err);
@@ -210,6 +210,71 @@ router.get("/:id", loggedIn, (req, res) => {
           });
       }
     });
+});
+router.get("/:id/:type", loggedIn, (req, res) => {
+  const follow = (user) => {
+    return new Promise((resolve, reject) => {
+      Follow.findOne({ followerId: req.user._id, followeeId: user._id })
+        .then((data) => {
+          if (data) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(false);
+        });
+    });
+  };
+  if (req.params.type === "followers") {
+    Follow.find({ followeeId: req.params.id })
+      .populate("followerId", "name _id dp")
+      .exec((err, users) => {
+        if (err) {
+          console.log("some database error 236", err);
+          return res.status(500);
+        }
+        console.log(users);
+        if (users.length) {
+          Promise.all(users.map((user) => follow(user.followerId))).then(
+            (data) => {
+              res.json({
+                ifollow: data,
+                users: users.map((user) => user.followerId),
+              });
+            }
+          );
+        } else {
+          res.json({ users: "", ifollow: "" });
+        }
+      });
+  } else if (req.params.type === "followings") {
+    Follow.find({ followerId: req.params.id })
+      .populate("followeeId", "name _id dp")
+      .exec((err, users) => {
+        if (err) {
+          console.log("some database error line 257");
+          return res.status(500);
+        }
+        console.log(users);
+        if (users.length) {
+          Promise.all(users.map((user) => follow(user.followeeId))).then(
+            (data) => {
+              res.json({
+                ifollow: data,
+                users: users.map((user) => user.followeeId),
+              });
+            }
+          );
+        } else {
+          res.json({ users: "", ifollow: "" });
+        }
+      });
+  } else {
+    res.status(404).send("invalid request");
+  }
 });
 router.get("/find/:_id", (req, res) => {
   User.findById(req.params._id).exec((err, user) => {

@@ -62,7 +62,7 @@ const NavBar = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setUsers(data.user);
+          setUsers(data.users);
           setFollow(data.data);
           console.log(data);
         })

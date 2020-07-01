@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../App";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { UserData } from "../presentation";
 
 const Profile = () => {
   const { state } = useContext(AuthContext);
@@ -16,6 +17,8 @@ const Profile = () => {
   const [ifollow, setIfollow] = useState("");
   const [dp, setDp] = useState("");
   const [image, setImage] = useState(undefined);
+  const [users, setUsers] = useState("");
+  const [ifollow2, setIfollow2] = useState("");
 
   useEffect(() => {
     console.log(userId);
@@ -118,6 +121,22 @@ const Profile = () => {
         });
     }
   };
+  const followData = (type) => {
+    document.getElementById("followData").show();
+    fetch("/user/" + userId + "/" + type, {
+      method: "get",
+      headers: { authorization: state.token },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setUsers(data.users);
+        setIfollow2(data.ifollow);
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div>
       <div
@@ -183,8 +202,47 @@ const Profile = () => {
             }}
           >
             <h6>{posts.length} posts</h6>
-            <h6>{follower} follower</h6>
-            <h6>{following} following</h6>
+            <h6
+              onClick={() => followData("followers")}
+              style={{ cursor: "pointer" }}
+            >
+              {follower} follower
+            </h6>
+            <h6
+              onClick={() => followData("followings")}
+              style={{ cursor: "pointer" }}
+            >
+              {following} following
+            </h6>
+            <dialog id="followData">
+              <button
+                className="btn-icon"
+                onClick={() => document.getElementById("followData").close()}
+              >
+                <i className="material-icons">cancel</i>
+              </button>
+              <div>
+                {users ? (
+                  <div>
+                    {users.map((user, i) => {
+                      if (user._id !== state.user._id) {
+                        return (
+                          <UserData
+                            key={user._id}
+                            name={user.name}
+                            _id={user._id}
+                            dp={user.dp}
+                            ifollow={ifollow2[i]}
+                          />
+                        );
+                      }
+                    })}
+                  </div>
+                ) : (
+                  "No results"
+                )}
+              </div>
+            </dialog>
           </div>
           <div>
             <p style={{ marginBottom: "-20px", fontSize: "20px" }}>{name}</p>
