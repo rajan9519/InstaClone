@@ -21,30 +21,26 @@ conn.once("open", () => {
 });
 
 router.put("/uploaddp", loggedIn, upload.single("file"), (req, res) => {
-  gfs.remove(
-    { _id: mongoose.mongo.ObjectId("5ef5a0d3202f3417ec15c9c3") },
-    (err, result) => {
-      if (err) {
-        return res.json({ error: err });
-      } else {
-        console.log("Successfully deleted ", result);
-        res.send("oh yeah");
-        User.findByIdAndUpdate(
-          req.user._id,
-          { $set: { dp: req.filename } },
-          { new: true },
-          (err, result) => {
-            if (err) {
-              return res.json({ error: err });
-            } else {
-              res.send(result);
-              console.log("succesfully updated ");
-            }
+  gfs.files.remove({ filename: req.user.dp }, (err, result) => {
+    if (err) {
+      return res.json({ error: err });
+    } else {
+      User.findByIdAndUpdate(
+        req.user._id,
+        { $set: { dp: req.filename } },
+        { new: true },
+        (err, result) => {
+          if (err) {
+            return res.json({ error: err });
+          } else {
+            res.send(result);
+            console.log(result);
+            console.log("succesfully updated ");
           }
-        );
-      }
+        }
+      );
     }
-  );
+  });
 });
 router.post("/follow", loggedIn, (req, res) => {
   const { followerId, followeeId, unfollow } = req.body;

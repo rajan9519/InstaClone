@@ -82,9 +82,9 @@ const Profile = () => {
         },
         body: formData,
       })
-        .then((res) => res.json)
+        .then((res) => res.json())
         .then((data) => {
-          console.log(data);
+          setDp(data.dp);
         })
         .catch((err) => {
           console.log(err);
@@ -138,23 +138,27 @@ const Profile = () => {
               marginBottom: "10px",
             }}
           />
-          <button
-            onClick={() => {
-              document.getElementById("mydp").click();
-            }}
-          >
-            Change Pic
-          </button>
-          <input
-            id="mydp"
-            type="file"
-            name="image"
-            placeholder="Descrition"
-            style={{ display: "none" }}
-            onChange={(e) => {
-              setImage(e.target.files[0]);
-            }}
-          />
+          {state.user._id === userId ? (
+            <div>
+              <button
+                onClick={() => {
+                  document.getElementById("mydp").click();
+                }}
+              >
+                Change Pic
+              </button>
+              <input
+                id="mydp"
+                type="file"
+                name="image"
+                placeholder="Descrition"
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  setImage(e.target.files[0]);
+                }}
+              />
+            </div>
+          ) : null}
         </div>
         <div style={{ marginLeft: "-33%", fontSize: "25px" }}>
           <div
