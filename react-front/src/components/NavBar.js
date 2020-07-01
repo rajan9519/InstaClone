@@ -102,7 +102,7 @@ const NavBar = () => {
         <div>
           {users.length ? (
             <div>
-              {search
+              {search && state.isAuthenticated
                 ? users.map((user, i) => {
                     if (user._id !== state.user._id) {
                       return (

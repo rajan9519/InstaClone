@@ -98,6 +98,7 @@ const SignUp = () => {
         <div className="auth-card">
           <h2>Instagram</h2>
           <input
+            autoComplete="off"
             type="text"
             placeholder="name"
             value={name}
@@ -106,6 +107,7 @@ const SignUp = () => {
             required
           />
           <input
+            autoComplete="off"
             type="email"
             placeholder="email"
             value={email}
@@ -114,6 +116,7 @@ const SignUp = () => {
             required
           />
           <input
+            autoComplete="off"
             type="text"
             placeholder="username"
             value={_id}

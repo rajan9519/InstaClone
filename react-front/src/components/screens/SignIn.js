@@ -59,6 +59,7 @@ const SignIn = () => {
         <div className="auth-card">
           <h2>Instagram</h2>
           <input
+            autoComplete="off"
             type="text"
             placeholder="email"
             name="email"

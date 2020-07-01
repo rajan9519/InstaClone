@@ -211,6 +211,21 @@ router.get("/:id", loggedIn, (req, res) => {
       }
     });
 });
+router.get("/find/:_id", (req, res) => {
+  User.findById(req.params._id).exec((err, user) => {
+    if (err) {
+      console.log(err);
+      return res.json({ error: "internal Server Error" });
+    } else {
+      if (user && req.params._id) {
+        res.json({ error: "Username Already Taken" });
+      } else {
+        res.send({ message: "Username Available" });
+      }
+    }
+  });
+});
+
 router.get("/:id/:type", loggedIn, (req, res) => {
   const follow = (user) => {
     return new Promise((resolve, reject) => {
@@ -275,19 +290,5 @@ router.get("/:id/:type", loggedIn, (req, res) => {
   } else {
     res.status(404).send("invalid request");
   }
-});
-router.get("/find/:_id", (req, res) => {
-  User.findById(req.params._id).exec((err, user) => {
-    if (err) {
-      console.log(err);
-      return res.json({ error: "internal Server Error" });
-    } else {
-      if (user) {
-        res.json({ error: "Username Already Taken" });
-      } else {
-        res.send({ message: "Username Available" });
-      }
-    }
-  });
 });
 module.exports = router;
