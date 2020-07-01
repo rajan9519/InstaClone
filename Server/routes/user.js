@@ -69,7 +69,9 @@ router.post("/follow", loggedIn, (req, res) => {
     if (yes) {
       if (!unfollow) {
         console.log("you are following this user");
-        return res.json({ error: "You are already following this user" });
+        User.findById(followeeId, (err, result) => {
+          return res.json({ ifollow: true, result });
+        });
       } else {
         Follow.deleteOne({ followerId, followeeId }, (err) => {
           if (err) {
@@ -92,7 +94,7 @@ router.post("/follow", loggedIn, (req, res) => {
                       if (err) {
                         return res.status(500).send(err);
                       } else {
-                        res.send(result);
+                        res.json({ ifollow: false, result });
                       }
                     }
                   );
@@ -104,7 +106,9 @@ router.post("/follow", loggedIn, (req, res) => {
       }
     } else {
       if (unfollow) {
-        return res.json({ error: "You haven't followed this user yet" });
+        User.findById(followeeId, (err, result) => {
+          return res.json({ ifollow: false, result });
+        });
       } else {
         const follow = new Follow({
           followerId,
@@ -131,7 +135,7 @@ router.post("/follow", loggedIn, (req, res) => {
                         res.json({ error: err });
                         return;
                       } else {
-                        res.send(result);
+                        res.send(true);
                       }
                     }
                   );

@@ -154,7 +154,18 @@ router.put("/like", loggedIn, (req, res) => {
   liked(userId, postId).then((yes) => {
     if (yes) {
       if (!isLiked) {
-        return res.json({ error: "Post Already Liked" });
+        Post.findByIdAndUpdate(
+          { _id: postId },
+          { $set: { isLiked: true } },
+          { new: true },
+          (err, result) => {
+            if (err) {
+              return res.status(500).send(err);
+            } else {
+              return res.send(result);
+            }
+          }
+        );
       } else {
         Like.deleteOne({ likedBy: userId, postId }, (err) => {
           if (err) {
@@ -177,7 +188,18 @@ router.put("/like", loggedIn, (req, res) => {
       }
     } else {
       if (isLiked) {
-        res.json({ error: "Post haven't Liked Yet" });
+        Post.findByIdAndUpdate(
+          { _id: postId },
+          { $set: { isLiked: true } },
+          { new: false },
+          (err, result) => {
+            if (err) {
+              return res.status(500).send(err);
+            } else {
+              return res.send(result);
+            }
+          }
+        );
       } else {
         const like = new Like({
           postId: postId,

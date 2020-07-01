@@ -31,13 +31,9 @@ const Post = (props) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.error) {
-          window.location.reload(true);
-        } else {
-          console.log(data);
-          setLikes(data.numLikes);
-          setIsLiked(data.isLiked);
-        }
+        console.log(data);
+        setLikes(data.numLikes);
+        setIsLiked(data.isLiked);
       })
       .catch((err) => {
         console.log(err);

@@ -25,11 +25,7 @@ const UserData = (props) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.error) {
-          window.location.reload(true);
-        } else {
-          setIfollow(!ifollow);
-        }
+        setIfollow(data.ifollow);
       })
       .catch((err) => {
         console.log(err);
