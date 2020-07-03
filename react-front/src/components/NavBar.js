@@ -29,6 +29,11 @@ const AfterSign = (props) => {
           Sign Out
         </Link>
       </div>
+      <div className="list">
+        <Link className="link" to="/chatroom">
+          Chat Room
+        </Link>
+      </div>
     </div>
   );
 };
@@ -43,6 +48,11 @@ const BeforeSign = () => {
       <div className="list">
         <Link className="link" to="/signup">
           SignUp
+        </Link>
+      </div>
+      <div className="list">
+        <Link className="link" to="/chatroom">
+          Chat Room
         </Link>
       </div>
     </div>

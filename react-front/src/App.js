@@ -18,6 +18,7 @@ import {
   show,
 } from "./components/screens";
 import { reducer } from "./reducer/authReducer";
+import { ChatRoom } from "./components/presentation";
 
 export const AuthContext = createContext();
 export const initialState = {
@@ -68,6 +69,9 @@ const Routing = () => {
       </Route>
       <Route exact path="/signin">
         <SignIn />
+      </Route>
+      <Route exact path="/chatroom">
+        <ChatRoom />
       </Route>
     </Switch>
   );
