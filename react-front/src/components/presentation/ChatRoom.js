@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
+import ChatText from "./ChatText";
 
 let socket;
 
 const ENDPOINT = "http://localhost:8000";
 
+let count = 0;
+
 const ChatRoom = () => {
   const [message, setMessage] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [recievedMessages, setRecievedMessages] = useState([]);
 
   useEffect(() => {
     socket = io(ENDPOINT);
+    count = 0;
   }, [ENDPOINT]);
 
   useEffect(() => {
     socket.on("message", (data) => {
-      console.log(data);
+      console.log(...recievedMessages);
+      //let msg = [...recievedMessages, data];
+      setRecievedMessages((recievedMessages) => recievedMessages.concat(data));
     });
   }, []);
   const send = (e) => {
@@ -26,11 +33,13 @@ const ChatRoom = () => {
       from,
       message,
     });
+    console.log(recievedMessages.length);
   };
   const join = (e) => {
     e.preventDefault();
     socket.emit("join", from);
   };
+
   return (
     <div>
       <h1>You are in ChatRoom</h1>
@@ -67,6 +76,13 @@ const ChatRoom = () => {
       >
         Send
       </button>
+      {recievedMessages.length
+        ? recievedMessages.map((data) => {
+            return (
+              <ChatText message={data.message} from={data.from} key={count++} />
+            );
+          })
+        : null}
     </div>
   );
 };
