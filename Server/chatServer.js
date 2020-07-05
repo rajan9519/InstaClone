@@ -33,23 +33,39 @@ io.on("connect", (socket) => {
       message
         .save()
         .then((data) => {
-          resolve(true);
+          console.log(data);
+          resolve({ data });
         })
         .catch((err) => {
-          resolve(false);
+          resolve({ err });
         });
     })
-      .then((yes) => {
-        if (yes) {
-          io.to(user[data.to]).emit("message", {
-            message: data.message,
-            from: data.from,
+      .then((result) => {
+        if (result.data) {
+          io.to(user[result.data.recieverId]).emit("message", {
+            _id: result.data._id,
+            message: result.data.message,
+            from: result.data.senderId,
           });
         }
       })
       .catch((err) => {
         console.log(err);
       });
+  });
+  socket.on("recieved", (_id) => {
+    Message.findByIdAndUpdate(
+      _id,
+      {
+        $set: { delivered: true },
+      },
+      { new: true },
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
   });
   socket.on("disconnect", () => {
     console.log(`user left ${socket.id}`);

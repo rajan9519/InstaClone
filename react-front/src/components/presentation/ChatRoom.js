@@ -24,6 +24,7 @@ const ChatRoom = () => {
       console.log(...recievedMessages);
       //let msg = [...recievedMessages, data];
       setRecievedMessages((recievedMessages) => recievedMessages.concat(data));
+      socket.emit("recieved", data._id);
     });
   }, []);
   const send = (e) => {
