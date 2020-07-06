@@ -43,8 +43,9 @@ io.on("connect", (socket) => {
           });
         } else {
           //send the pending messages
-          io.to(user[username]).emit("pending", { data: result.data });
-          console.log(result);
+          result.data.map((data) => {
+            io.to(user[data.recieverId]).emit("message", data);
+          });
         }
       })
       .catch((err) => {
@@ -71,9 +72,7 @@ io.on("connect", (socket) => {
       .then((result) => {
         if (result.data) {
           console.log(result.data);
-          io.to(user[result.data.recieverId]).emit("message", {
-            data: result.data,
-          });
+          io.to(user[result.data.recieverId]).emit("message", result.data);
         }
       })
       .catch((err) => {

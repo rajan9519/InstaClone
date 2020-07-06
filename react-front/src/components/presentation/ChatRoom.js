@@ -23,15 +23,8 @@ const ChatRoom = () => {
     socket.on("message", (data) => {
       console.log(...recievedMessages);
       //let msg = [...recievedMessages, data];
-      setRecievedMessages((recievedMessages) =>
-        recievedMessages.concat(data.data)
-      );
+      setRecievedMessages((recievedMessages) => recievedMessages.concat(data));
       socket.emit("recieved", data._id);
-    });
-    socket.on("pending", (data) => {
-      setRecievedMessages((recievedMessages) =>
-        recievedMessages.concat(data.data)
-      );
     });
   }, []);
   const send = (e) => {
