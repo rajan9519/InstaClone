@@ -50,11 +50,6 @@ const BeforeSign = () => {
           SignUp
         </Link>
       </div>
-      <div className="list">
-        <Link className="link" to="/chatroom">
-          Chat Room
-        </Link>
-      </div>
     </div>
   );
 };

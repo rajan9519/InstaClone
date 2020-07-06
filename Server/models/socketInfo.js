@@ -10,7 +10,7 @@ const socketInfoSchema = new mongoose.Schema(
     },
     socketId: {
       type: String,
-      required: true,
+      default: "not setted yet",
     },
     online: {
       type: Boolean,

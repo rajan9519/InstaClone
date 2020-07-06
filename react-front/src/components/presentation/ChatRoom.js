@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 import ChatText from "./ChatText";
 
-let socket;
+import socket from "../../reducer/socketInstance";
 
-const ENDPOINT = "http://localhost:8000";
+// const ENDPOINT = "http://localhost:8000";
 
 let count = 0;
 
@@ -14,10 +14,10 @@ const ChatRoom = () => {
   const [to, setTo] = useState("");
   const [recievedMessages, setRecievedMessages] = useState([]);
 
-  useEffect(() => {
-    socket = io(ENDPOINT);
-    count = 0;
-  }, [ENDPOINT]);
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+  //   count = 0;
+  // }, [ENDPOINT]);
 
   useEffect(() => {
     socket.on("message", (data) => {

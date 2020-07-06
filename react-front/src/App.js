@@ -19,6 +19,7 @@ import {
 } from "./components/screens";
 import { reducer } from "./reducer/authReducer";
 import { ChatRoom } from "./components/presentation";
+import socket from "./reducer/socketInstance";
 
 export const AuthContext = createContext();
 export const initialState = {
@@ -37,6 +38,7 @@ const Routing = () => {
       if (window.location.pathname === "/signin") {
         history.push("/");
       }
+      socket.emit("join", state.user._id);
     } else {
       history.push("/signin");
     }

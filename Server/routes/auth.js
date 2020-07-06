@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 
 const { JWT_SECRET } = require("../keys");
 const User = mongoose.model("User");
+const SocketInfo = mongoose.model("SocketInfo");
 
 router.get("/", (req, res) => {
   res.send("you on authentication router");
@@ -35,6 +36,10 @@ router.post("/signup", (req, res) => {
           user
             .save()
             .then((user) => {
+              const socketUser = new SocketInfo({
+                userId: user._id,
+              });
+              socketUser.save();
               return res.json({ message: "Successfully Signed Up" });
             })
             .catch((err) => {
