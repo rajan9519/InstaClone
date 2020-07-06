@@ -5,7 +5,6 @@ const socketio = require("socket.io");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const { resolve } = require("path");
-const { rejects } = require("assert");
 
 const app = express();
 const server = http.createServer(app);
@@ -19,14 +18,43 @@ const user = {};
 
 io.on("connect", (socket) => {
   socket.on("join", (username) => {
+    username = username.trim();
     //socket.join();
     console.log(`${username} is online now`);
     user[username] = socket.id;
+    new Promise((resolve, reject) => {
+      Message.find(
+        { delivered: false, recieverId: username },
+        (error, data) => {
+          if (error) {
+            console.log(error, "line 29");
+            resolve({ error });
+          } else {
+            resolve({ data });
+          }
+        }
+      );
+    })
+      .then((result) => {
+        if (result.error) {
+          // send an error message for the user
+          socket.emit("pending", {
+            error: "Unable to load messages Please try again",
+          });
+        } else {
+          //send the pending messages
+          io.to(user[username]).emit("pending", { data: result.data });
+          console.log(result);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
   socket.on("send", (data) => {
     const message = new Message({
-      senderId: data.from,
-      recieverId: data.to,
+      senderId: data.from.trim(),
+      recieverId: data.to.trim(),
       message: data.message,
     });
     new Promise((resolve, reject) => {
@@ -42,10 +70,9 @@ io.on("connect", (socket) => {
     })
       .then((result) => {
         if (result.data) {
+          console.log(result.data);
           io.to(user[result.data.recieverId]).emit("message", {
-            _id: result.data._id,
-            message: result.data.message,
-            from: result.data.senderId,
+            data: result.data,
           });
         }
       })

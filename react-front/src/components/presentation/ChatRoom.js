@@ -23,15 +23,22 @@ const ChatRoom = () => {
     socket.on("message", (data) => {
       console.log(...recievedMessages);
       //let msg = [...recievedMessages, data];
-      setRecievedMessages((recievedMessages) => recievedMessages.concat(data));
+      setRecievedMessages((recievedMessages) =>
+        recievedMessages.concat(data.data)
+      );
       socket.emit("recieved", data._id);
+    });
+    socket.on("pending", (data) => {
+      setRecievedMessages((recievedMessages) =>
+        recievedMessages.concat(data.data)
+      );
     });
   }, []);
   const send = (e) => {
     e.preventDefault();
     socket.emit("send", {
-      to,
-      from,
+      to: to.trim(),
+      from: from.trim(),
       message,
     });
     console.log(recievedMessages.length);
@@ -80,7 +87,11 @@ const ChatRoom = () => {
       {recievedMessages.length
         ? recievedMessages.map((data) => {
             return (
-              <ChatText message={data.message} from={data.from} key={count++} />
+              <ChatText
+                message={data.message}
+                from={data.senderId}
+                key={data._id}
+              />
             );
           })
         : null}
