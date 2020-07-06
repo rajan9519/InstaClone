@@ -17,3 +17,4 @@ const Like = require("./like");
 const Comment = require("./comment");
 const Follow = require("./follow");
 const Message = require("./message");
+const SocketInfo = require("./socketInfo");

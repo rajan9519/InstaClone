@@ -4,24 +4,51 @@ const express = require("express");
 const socketio = require("socket.io");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const { resolve } = require("path");
 
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
 const Message = mongoose.model("Message");
+const SocketInfo = mongoose.model("SocketInfo");
 
 app.use(cors());
 
-const user = {};
+const getSocketId = (username) => {
+  return new Promise((resolve, reject) => {
+    SocketInfo.findOne({ userId: username }, (err, result) => {
+      if (err) {
+        resolve({ error: err });
+      } else {
+        resolve({ result });
+      }
+    });
+  });
+};
 
 io.on("connect", (socket) => {
   socket.on("join", (username) => {
     username = username.trim();
+    // const newdata = new SocketInfo({
+    //   userId: "manisha",
+    //   socketId: socket.id,
+    // });
+    // newdata
+    //   .save()
+    //   .then((data) => console.log("saved user"))
+    //   .catch((err) => console.log(err));
+    SocketInfo.findOneAndUpdate(
+      { userId: username },
+      { $set: { online: true, socketId: socket.id } },
+      { new: true },
+      (err, result) => {
+        console.log("error: ", err, " result: ", result);
+      }
+    );
+
     //socket.join();
     console.log(`${username} is online now`);
-    user[username] = socket.id;
+    // user[username] = socket.id;
     new Promise((resolve, reject) => {
       Message.find(
         { delivered: false, recieverId: username },
@@ -43,9 +70,19 @@ io.on("connect", (socket) => {
           });
         } else {
           //send the pending messages
-          result.data.map((data) => {
-            io.to(user[data.recieverId]).emit("message", data);
-          });
+          getSocketId(username)
+            .then((socketData) => {
+              if (socketData.error) {
+                console.log(socketData.error);
+              } else {
+                result.data.map((data) => {
+                  io.to(socketData.result.socketId).emit("message", data);
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       })
       .catch((err) => {
@@ -72,7 +109,17 @@ io.on("connect", (socket) => {
       .then((result) => {
         if (result.data) {
           console.log(result.data);
-          io.to(user[result.data.recieverId]).emit("message", result.data);
+          getSocketId(result.data.recieverId)
+            .then((socketData) => {
+              if (socketData.error) {
+                console.log(socketData.error);
+              } else {
+                io.to(socketData.result.socketId).emit("message", result.data);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       })
       .catch((err) => {
@@ -95,6 +142,14 @@ io.on("connect", (socket) => {
   });
   socket.on("disconnect", () => {
     console.log(`user left ${socket.id}`);
+    SocketInfo.findOneAndUpdate(
+      { socketId: socket.id },
+      { $set: { online: false } },
+      { new: true },
+      (err, result) => {
+        console.log("error ", err, " result", result);
+      }
+    );
   });
 });
 
