@@ -177,3 +177,40 @@ input {
   border: none;
   padding: 10px;
 }
+
+.grid-container {
+  display: grid;
+  grid-template-rows: 46px 500px 46px;
+}
+.sender-profile {
+  justify-self: center;
+  align-self: center;
+}
+.type-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.chat-text {
+  width: 100%;
+}
+.message-container {
+  overflow-y: scroll;
+}
+.message-content {
+  width: 80%;
+  border: 1px solid grey;
+  margin: 10px;
+}
+.other-message {
+  float: left;
+  border-radius: 1px 6px 6px 41px;
+  margin-left: 10px;
+  padding: 10px 4px 6px 21px;
+}
+.my-message {
+  float: right;
+  border-radius: 6px 1px 41px 6px;
+  margin-right: 10px;
+  padding: 5px;
+}

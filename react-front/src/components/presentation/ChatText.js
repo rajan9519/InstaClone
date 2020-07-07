@@ -2,10 +2,7 @@ import React from "react";
 
 const ChatText = (props) => {
   return (
-    <div>
-      <div style={{ fontWeight: "bold" }}>{props.from} </div>
-      <div>{props.message}</div>
-    </div>
+    <div className={"message-content " + props.className}>{props.message}</div>
   );
 };
 

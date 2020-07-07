@@ -65,9 +65,7 @@ io.on("connect", (socket) => {
       .then((result) => {
         if (result.error) {
           // send an error message for the user
-          socket.emit("pending", {
-            error: "Unable to load messages Please try again",
-          });
+          console.log(result.error);
         } else {
           //send the pending messages
           getSocketId(username)
