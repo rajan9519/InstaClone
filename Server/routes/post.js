@@ -233,7 +233,6 @@ router.put("/like", loggedIn, (req, res) => {
 });
 router.get("/comment/:postId", loggedIn, (req, res) => {
   Comment.find({ commentOn: req.params.postId })
-    .populate("commentBy", "id")
     .sort("-createdAt")
     .exec((err, result) => {
       if (err) {

@@ -177,6 +177,10 @@ input {
   border: none;
   padding: 10px;
 }
+.comments {
+  max-height: 200px;
+  overflow-y: scroll;
+}
 
 .grid-container {
   display: grid;

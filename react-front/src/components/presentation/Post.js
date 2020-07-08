@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import icons from "../../assets";
 import { Link } from "react-router-dom";
+import Comment from "./Comment";
 
 const Post = (props) => {
   const url =
@@ -22,7 +23,7 @@ const Post = (props) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setComments((comments) => comments.concat(data));
+        setComments((comments) => data.concat(comments));
       })
       .catch((err) => console.log(err));
   }, [props.postId]);
@@ -71,7 +72,7 @@ const Post = (props) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setComments((comments) => comments.concat(data));
+        setComments((comments) => [data].concat(comments));
         setText("");
       })
       .catch((err) => {
@@ -152,6 +153,16 @@ const Post = (props) => {
             <a>
               View all <span>{comments.length}</span> comments
             </a>
+            <div className="comments">
+              {comments.length
+                ? comments.map((comment) => (
+                    <Comment
+                      _id={comment.commentBy}
+                      comment={comment.comment}
+                    />
+                  ))
+                : null}
+            </div>
           </div>
         </div>
         <div>
