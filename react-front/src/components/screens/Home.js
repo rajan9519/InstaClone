@@ -37,7 +37,6 @@ const Home = () => {
         filename={post.fileName}
         name={post.postedBy.name}
         likes={post.numLikes}
-        comments={post.numComments}
         postId={post._id}
         userId={post.postedBy._id}
         isLiked={post.isLiked}

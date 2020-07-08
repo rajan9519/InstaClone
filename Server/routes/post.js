@@ -231,7 +231,20 @@ router.put("/like", loggedIn, (req, res) => {
     }
   });
 });
-
+router.get("/comment/:postId", loggedIn, (req, res) => {
+  Comment.find({ commentOn: req.params.postId })
+    .populate("commentBy", "id")
+    .sort("-createdAt")
+    .exec((err, result) => {
+      if (err) {
+        console.log(err);
+        res.send("error");
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    });
+});
 router.put("/comment", loggedIn, (req, res) => {
   const comment = new Comment({
     commentBy: req.body.userId,
@@ -241,8 +254,8 @@ router.put("/comment", loggedIn, (req, res) => {
 
   comment
     .save()
-    .then((result) => {
-      console.log(result);
+    .then((result1) => {
+      console.log(result1);
 
       Post.findByIdAndUpdate(
         { _id: req.body.postId },
@@ -252,7 +265,7 @@ router.put("/comment", loggedIn, (req, res) => {
           if (err) {
             return res.status(500).send(err);
           } else {
-            res.send(result);
+            res.send(result1);
           }
         }
       );

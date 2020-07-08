@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import icons from "../../assets";
 import { Link } from "react-router-dom";
 
@@ -10,10 +10,22 @@ const Post = (props) => {
   const [postId, setPostId] = useState(props.postId);
   const [userId, setUserId] = useState(props.userId);
   const [likes, setLikes] = useState(props.likes);
-  const [comments, setComments] = useState(props.comments);
+  const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
   const [isLiked, setIsLiked] = useState(props.isLiked);
 
+  useEffect(() => {
+    fetch("/post/comment/" + props.postId, {
+      method: "get",
+      "Content-Type": "application/json",
+      headers: { authorization: localStorage.getItem("token") },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setComments((comments) => comments.concat(data));
+      })
+      .catch((err) => console.log(err));
+  }, [props.postId]);
   const handleLike = (e) => {
     e.preventDefault();
     setIsLiked(!isLiked);
@@ -59,7 +71,7 @@ const Post = (props) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setComments(data.numComments);
+        setComments((comments) => comments.concat(data));
         setText("");
       })
       .catch((err) => {
@@ -138,7 +150,7 @@ const Post = (props) => {
         <div>
           <div>
             <a>
-              View all <span>{comments}</span> comments
+              View all <span>{comments.length}</span> comments
             </a>
           </div>
         </div>
