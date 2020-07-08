@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useDebugValue } from "react";
 import { useParams, Link } from "react-router-dom";
 // import io from "socket.io-client";
 import ChatText from "./ChatText";
@@ -13,6 +13,7 @@ let count = 0;
 const ChatRoom = () => {
   const [message, setMessage] = useState("");
   const [recievedMessages, setRecievedMessages] = useState([]);
+  const [connected, setConnected] = useState(false);
 
   const { state, dispatch } = useContext(AuthContext);
 
@@ -24,14 +25,25 @@ const ChatRoom = () => {
   // }, [ENDPOINT]);
 
   useEffect(() => {
+    console.log("use effect is used here");
     socket.on("message", (data) => {
+      console.log(data);
       console.log(...recievedMessages);
       //let msg = [...recievedMessages, data];
       setRecievedMessages((recievedMessages) => recievedMessages.concat(data));
       socket.emit("recieved", data._id);
     });
-    socket.emit("join", state.user._id);
+    socket.on("connected", () => {
+      setConnected(true);
+    });
   }, []);
+
+  useEffect(() => {
+    if (connected) {
+      socket.emit("convwith", { you: state.user._id, other: recieverId });
+    }
+  }, [connected]);
+
   const send = (e) => {
     e.preventDefault();
     socket.emit("send", {
@@ -40,6 +52,7 @@ const ChatRoom = () => {
       message,
     });
     console.log(recievedMessages.length);
+    setMessage("");
   };
 
   return (

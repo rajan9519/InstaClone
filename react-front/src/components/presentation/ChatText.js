@@ -2,7 +2,7 @@ import React from "react";
 
 const ChatText = (props) => {
   return (
-    <div className={"message-content " + props.className}>{props.message}</div>
+    <div className={"message-content " + props.classname}>{props.message}</div>
   );
 };
 

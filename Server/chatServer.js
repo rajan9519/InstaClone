@@ -29,29 +29,25 @@ const getSocketId = (username) => {
 io.on("connect", (socket) => {
   socket.on("join", (username) => {
     username = username.trim();
-    // const newdata = new SocketInfo({
-    //   userId: "manisha",
-    //   socketId: socket.id,
-    // });
-    // newdata
-    //   .save()
-    //   .then((data) => console.log("saved user"))
-    //   .catch((err) => console.log(err));
     SocketInfo.findOneAndUpdate(
       { userId: username },
       { $set: { online: true, socketId: socket.id } },
       { new: true },
       (err, result) => {
         console.log("error: ", err, " result: ", result);
+        io.to(socket.id).emit("connected");
       }
     );
 
-    //socket.join();
     console.log(`${username} is online now`);
-    // user[username] = socket.id;
+  });
+  socket.on("convwith", (data) => {
     new Promise((resolve, reject) => {
       Message.find(
-        { delivered: false, recieverId: username },
+        {
+          recieverId: { $in: [data.you, data.other] },
+          senderId: { $in: [data.you, data.other] },
+        },
         (error, data) => {
           if (error) {
             console.log(error, "line 29");
@@ -68,13 +64,15 @@ io.on("connect", (socket) => {
           console.log(result.error);
         } else {
           //send the pending messages
-          getSocketId(username)
+
+          getSocketId(data.you)
             .then((socketData) => {
               if (socketData.error) {
                 console.log(socketData.error);
               } else {
                 result.data.map((data) => {
                   io.to(socketData.result.socketId).emit("message", data);
+                  console.log(data);
                 });
               }
             })
