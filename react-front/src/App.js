@@ -50,7 +50,7 @@ const Routing = () => {
       <Route exact path="/">
         <Home />
       </Route>
-      <Route path="/profile/:userId">
+      <Route exact path="/profile/:userId">
         <Profile />
       </Route>
       <Route exact path="/createpost">
@@ -72,7 +72,7 @@ const Routing = () => {
       <Route exact path="/signin">
         <SignIn />
       </Route>
-      <Route exact path="/chatroom">
+      <Route exact path="/chatroom/:recieverId">
         <ChatRoom />
       </Route>
     </Switch>

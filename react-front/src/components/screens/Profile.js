@@ -191,7 +191,9 @@ const Profile = () => {
             <button style={{ fontSize: "25px" }} onClick={() => follow()}>
               {myProfile ? "Edit" : ifollow ? "Unfollow" : "Follow"}
             </button>
-            <button style={{ fontSize: "25px" }}>setting </button>
+            <Link to={"/chatroom/" + userId}>
+              <button style={{ fontSize: "25px" }}>Message</button>
+            </Link>
           </div>
           <div
             style={{

@@ -29,11 +29,6 @@ const AfterSign = (props) => {
           Sign Out
         </Link>
       </div>
-      <div className="list">
-        <Link className="link" to="/chatroom">
-          Chat Room
-        </Link>
-      </div>
     </div>
   );
 };
