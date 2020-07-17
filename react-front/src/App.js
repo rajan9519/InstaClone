@@ -39,6 +39,7 @@ const Routing = () => {
         history.push("/");
       }
       socket.emit("join", state.user._id);
+      console.log(socket);
     } else {
       history.push("/signin");
     }

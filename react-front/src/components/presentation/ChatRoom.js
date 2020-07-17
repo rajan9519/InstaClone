@@ -26,6 +26,7 @@ const ChatRoom = () => {
 
   useEffect(() => {
     console.log("use effect is used here");
+    socket.emit("convwith", { you: state.user._id, other: recieverId });
     socket.on("message", (data) => {
       console.log(data);
       console.log(...recievedMessages);

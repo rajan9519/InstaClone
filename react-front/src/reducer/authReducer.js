@@ -7,6 +7,7 @@ export const reducer = (state, action) => {
       localStorage.setItem("user", JSON.stringify(action.payload.user));
       localStorage.setItem("isAuthenticated", true);
       socket.emit("join", action.payload.user._id);
+      console.log(action.payload.user._id);
       return {
         ...state,
         isAuthenticated: true,

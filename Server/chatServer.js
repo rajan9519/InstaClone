@@ -71,6 +71,7 @@ io.on("connect", (socket) => {
                 console.log(socketData.error);
               } else {
                 result.data.map((data) => {
+                  console.log(socketData.result.socketId);
                   io.to(socketData.result.socketId).emit("message", data);
                   console.log(data);
                 });
