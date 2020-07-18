@@ -10,7 +10,7 @@ const SignUp = () => {
   const [valid, setValid] = useState(false);
   const [message, setMessage] = useState("");
   const [color, setColor] = useState("");
-  const [show1, setShow] = useState(false);
+  const [show1, setShow1] = useState(false);
 
   useEffect(() => {
     if (message && color) {
@@ -47,7 +47,7 @@ const SignUp = () => {
             setPassword("");
             setEmail("");
           }
-          setShow(!show1);
+          setShow1(!show1);
         });
     }
   };

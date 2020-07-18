@@ -9,12 +9,13 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [color, setColor] = useState("");
+  const [show1, setShow1] = useState(false);
 
   useEffect(() => {
     if (message && color) {
       show(message, color);
     }
-  }, [message, color]);
+  }, [show1]);
 
   const handleSignIn = (e) => {
     e.preventDefault();
@@ -33,6 +34,7 @@ const SignIn = () => {
         if (data.error) {
           setMessage(data.error);
           setColor("red");
+          setShow1(!show1);
         } else {
           // localStorage.setItem("token", data.token);
           // localStorage.setItem("user", JSON.stringify(data.user));
@@ -42,6 +44,7 @@ const SignIn = () => {
           // console.log(JSON.parse(localStorage.getItem("user")));
           setMessage(data.message);
           setColor("green");
+          setShow1(!show1);
           dispatch({
             type: "SIGNIN",
             payload: data,

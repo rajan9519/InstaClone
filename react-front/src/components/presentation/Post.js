@@ -157,6 +157,7 @@ const Post = (props) => {
               {comments.length
                 ? comments.map((comment) => (
                     <Comment
+                      key={comment._id}
                       _id={comment.commentBy}
                       comment={comment.comment}
                     />
