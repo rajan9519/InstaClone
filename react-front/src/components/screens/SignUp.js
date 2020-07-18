@@ -10,12 +10,13 @@ const SignUp = () => {
   const [valid, setValid] = useState(false);
   const [message, setMessage] = useState("");
   const [color, setColor] = useState("");
+  const [show1, setShow] = useState(false);
 
   useEffect(() => {
     if (message && color) {
       show(message, color);
     }
-  }, [message, color]);
+  }, [show1]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -46,6 +47,7 @@ const SignUp = () => {
             setPassword("");
             setEmail("");
           }
+          setShow(!show1);
         });
     }
   };
