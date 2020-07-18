@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Grid = require("gridfs-stream");
 const loggedIn = require("../middleware/loggedIn");
 const upload = require("../middleware/upload");
-const mongoURI = require("../keys").MONGO_URL;
+const mongoURI = require("../key").MONGO_URL;
 
 const Post = mongoose.model("Post");
 const Like = mongoose.model("Like");

@@ -27,8 +27,7 @@ const userSchema = new mongoose.Schema({
   },
   dp: {
     type: String,
-    default:
-      "https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png",
+    default: "5cdefe5743ccde84a138c041b6f27dce.jpg",
   },
 });
 

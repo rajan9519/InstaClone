@@ -3,7 +3,7 @@ const path = require("path");
 const multer = require("multer");
 const crypto = require("crypto");
 const GridFsStorage = require("multer-gridfs-storage");
-const mongoURI = require("../keys").MONGO_URL;
+const mongoURI = require("../key").MONGO_URL;
 
 // Create storage engine
 const storage = new GridFsStorage({
