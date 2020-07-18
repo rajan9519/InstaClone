@@ -21,26 +21,20 @@ conn.once("open", () => {
 });
 
 router.put("/uploaddp", loggedIn, upload.single("file"), (req, res) => {
-  gfs.files.remove({ filename: req.user.dp }, (err, result) => {
-    if (err) {
-      return res.json({ error: err });
-    } else {
-      User.findByIdAndUpdate(
-        req.user._id,
-        { $set: { dp: req.filename } },
-        { new: true },
-        (err, result) => {
-          if (err) {
-            return res.json({ error: err });
-          } else {
-            res.send(result);
-            console.log(result);
-            console.log("succesfully updated ");
-          }
-        }
-      );
+  User.findByIdAndUpdate(
+    req.user._id,
+    { $set: { dp: req.filename } },
+    { new: true },
+    (err, result) => {
+      if (err) {
+        return res.json({ error: err });
+      } else {
+        res.send(result);
+        console.log(result);
+        console.log("succesfully updated ");
+      }
     }
-  });
+  );
 });
 router.post("/follow", loggedIn, (req, res) => {
   const { followerId, followeeId, unfollow } = req.body;

@@ -11,6 +11,7 @@ mongoose.connect(
     }
   }
 );
+const Pending = require("./pending");
 const User = require("./user");
 const Post = require("./post");
 const Like = require("./like");

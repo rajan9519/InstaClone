@@ -35,7 +35,7 @@ const UserData = (props) => {
     <div className="user-card">
       <div className="user-data">
         <div>
-          <img className="profile-pic" src={props.dp}></img>
+          <img className="profile-pic" src={"/post/image/" + props.dp}></img>
         </div>
         <div className="user-info">
           <Link to={"/profile/" + props._id} className="user-id">

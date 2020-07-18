@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
+const pendingSchema = new mongoose.Schema({
   _id: {
     type: String,
     required: true,
@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "ac135f21f90f240e34b138207e0bf5bc.jpg",
   },
+  createdAt: {
+    type: Date,
+    expires: 3600,
+    default: Date.now,
+  },
 });
 
-mongoose.model("User", userSchema);
+mongoose.model("Pending", pendingSchema);

@@ -7,15 +7,21 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../key");
 const User = mongoose.model("User");
 const SocketInfo = mongoose.model("SocketInfo");
+const Pending = mongoose.model("Pending");
 
 router.get("/", (req, res) => {
   res.send("you on authentication router");
 });
 
+router.get("/validate");
+
 router.post("/signup", (req, res) => {
   const { _id, name, email, password } = req.body;
   if (!name || !email || !password) {
     res.status(422).json({ error: "please add all the fields" });
+    return;
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+    res.json({ error: "Invalid Email Address" });
     return;
   }
   User.findOne({ email })

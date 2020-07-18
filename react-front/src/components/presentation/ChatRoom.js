@@ -53,6 +53,9 @@ const ChatRoom = () => {
       message,
     });
     console.log(recievedMessages.length);
+    setRecievedMessages((recievedMessages) =>
+      recievedMessages.concat([message])
+    );
     setMessage("");
   };
 
