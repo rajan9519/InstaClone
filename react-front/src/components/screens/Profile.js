@@ -2,6 +2,18 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../App";
 import { useParams, Link } from "react-router-dom";
 import { UserData } from "../presentation";
+import {
+  CssBaseline,
+  Container,
+  Grid,
+  Hidden,
+  Typography,
+  Button,
+  IconButton,
+  Icon,
+  Divider,
+  Box,
+} from "@material-ui/core";
 
 const Profile = () => {
   const { state } = useContext(AuthContext);
@@ -137,149 +149,183 @@ const Profile = () => {
         console.log(err);
       });
   };
-  return (
-    <div>
-      <div
-        style={{
-          marginTop: "30px",
-          display: "flex",
-          justifyContent: "space-around",
-          borderBottom: "1px solid grey",
-        }}
+
+  const Info = () => {
+    return (
+      <Grid
+        container
+        spacing={3}
+        direction="row"
+        justify="center"
+        alignItems="baseline"
       >
-        <div className="dp">
-          <img
-            src={"/post/image/" + dp}
-            style={{
-              width: "150px",
-              height: "150px",
-              borderRadius: "75px",
-              marginBottom: "10px",
-            }}
-          />
-          {state.user._id === userId ? (
-            <div>
-              <button
-                onClick={() => {
-                  document.getElementById("mydp").click();
-                }}
-              >
-                Change Pic
-              </button>
-              <input
-                id="mydp"
-                type="file"
-                name="image"
-                placeholder="Descrition"
-                style={{ display: "none" }}
-                onChange={(e) => {
-                  setImage(e.target.files[0]);
+        <Grid item xs={4}>
+          <Typography>{posts.length} Post</Typography>
+        </Grid>
+        <Grid item xs={4}>
+          <Button onClick={() => followData("followers")}>
+            {follower} Follower
+          </Button>
+        </Grid>
+        <Grid item xs={4}>
+          <Button onClick={() => followData("followings")}>
+            {following} Following
+          </Button>
+        </Grid>
+        <dialog id="followData">
+          <button
+            className="btn-icon"
+            onClick={() => document.getElementById("followData").close()}
+          >
+            <i className="material-icons">cancel</i>
+          </button>
+          <div>
+            {users ? (
+              <div>
+                {users.map((user, i) => {
+                  if (user._id !== state.user._id) {
+                    return (
+                      <UserData
+                        key={user._id}
+                        name={user.name}
+                        _id={user._id}
+                        dp={user.dp}
+                        ifollow={ifollow2[i]}
+                      />
+                    );
+                  }
+                })}
+              </div>
+            ) : (
+              "No results"
+            )}
+          </div>
+        </dialog>
+      </Grid>
+    );
+  };
+
+  return (
+    <React.Fragment>
+      <CssBaseline />
+      <Container maxWidth="md">
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
+            <div className="dp">
+              <img
+                src={"/post/image/" + dp}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  maxWidth: "150px",
+                  maxHeight: "150px",
+                  borderRadius: "100%",
+                  marginBottom: "10px",
                 }}
               />
+              {state.user._id === userId ? (
+                <div>
+                  <button
+                    onClick={() => {
+                      document.getElementById("mydp").click();
+                    }}
+                  >
+                    Change Pic
+                  </button>
+                  <input
+                    id="mydp"
+                    type="file"
+                    name="image"
+                    placeholder="Descrition"
+                    style={{ display: "none" }}
+                    onChange={(e) => {
+                      setImage(e.target.files[0]);
+                    }}
+                  />
+                </div>
+              ) : null}
             </div>
-          ) : null}
-        </div>
-        <div style={{ marginLeft: "-33%", fontSize: "25px" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              width: "110%",
-            }}
-          >
-            <h6 style={{ margin: "0px 0px 0px 0px" }}>{userId}</h6>
-            <button style={{ fontSize: "25px" }} onClick={() => follow()}>
-              {myProfile ? "Edit" : ifollow ? "Unfollow" : "Follow"}
-            </button>
-            <Link to={"/chatroom/" + userId}>
-              <button style={{ fontSize: "25px" }}>Message</button>
-            </Link>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "108%",
-              margin: "-5px 0px -45px 0px",
-            }}
-          >
-            <h6>{posts.length} posts</h6>
-            <h6
-              onClick={() => followData("followers")}
-              style={{ cursor: "pointer" }}
-            >
-              {follower} follower
-            </h6>
-            <h6
-              onClick={() => followData("followings")}
-              style={{ cursor: "pointer" }}
-            >
-              {following} following
-            </h6>
-            <dialog id="followData">
-              <button
-                className="btn-icon"
-                onClick={() => document.getElementById("followData").close()}
-              >
-                <i className="material-icons">cancel</i>
-              </button>
-              <div>
-                {users ? (
-                  <div>
-                    {users.map((user, i) => {
-                      if (user._id !== state.user._id) {
-                        return (
-                          <UserData
-                            key={user._id}
-                            name={user.name}
-                            _id={user._id}
-                            dp={user.dp}
-                            ifollow={ifollow2[i]}
-                          />
-                        );
-                      }
-                    })}
-                  </div>
-                ) : (
-                  "No results"
-                )}
-              </div>
-            </dialog>
-          </div>
+          </Grid>
+          <Grid item xs={8}>
+            <Grid container spacing={3}>
+              <Grid item xs={8}>
+                <Grid
+                  container
+                  spacing={3}
+                  direction="row"
+                  justify="space-evenly"
+                  alignItems="baseline"
+                >
+                  <Grid item>
+                    <Typography>{userId}</Typography>
+                  </Grid>
+                  <Grid item>
+                    <Button variant="outlined" onClick={() => follow()}>
+                      <Typography variant="subtitile2">
+                        {myProfile
+                          ? "Edit Profile"
+                          : ifollow
+                          ? "Unfollow"
+                          : "Follow"}
+                      </Typography>
+                    </Button>
+                  </Grid>
+                  {myProfile && (
+                    <Grid item>
+                      <IconButton>
+                        <Icon>settings</Icon>
+                      </IconButton>
+                    </Grid>
+                  )}
+                </Grid>
+                <Hidden smDown>
+                  <Info />
+                </Hidden>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <Typography variant="button">{name}</Typography>
+                    <Typography>VNITian</Typography>
+                    <Typography>Rajput</Typography>
+                    <Typography>Positivity king</Typography>
+                    <Typography>Optimistic</Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Hidden smUp>
+          <Box pt={3} pb={3}>
+            <Divider variant="fullWidth" />
+            <Info />
+          </Box>
+        </Hidden>
+        <Box pt={3} pb={3}>
+          <Divider variant="fullWidth" />
+        </Box>
+        <div>
           <div>
-            <p style={{ marginBottom: "-20px", fontSize: "20px" }}>{name}</p>
-            <p style={{ marginBottom: "-20px", fontSize: "20px" }}>VNITian</p>
-            <p style={{ marginBottom: "-20px", fontSize: "20px" }}>Rajput</p>
-            <p style={{ marginBottom: "-20px", fontSize: "20px" }}>
-              Positivity King
-            </p>
-            <p style={{ marginBottom: "-20px", fontSize: "20px" }}>
-              Optimistic
-            </p>
-            <p></p>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <button>POSTS</button>
+              <button>IGTV</button>
+              <button>SAVED</button>
+              <button>TAGGED</button>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap" }}>
+              {posts
+                ? posts.map((post) => (
+                    <img
+                      key={post._id}
+                      src={"/post/image/" + post.fileName}
+                      style={{ width: "30%", margin: "10px 10px" }}
+                    />
+                  ))
+                : "no image found"}
+            </div>
           </div>
         </div>
-      </div>
-      <div>
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
-          <button>POSTS</button>
-          <button>IGTV</button>
-          <button>SAVED</button>
-          <button>TAGGED</button>
-        </div>
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {posts
-            ? posts.map((post) => (
-                <img
-                  key={post._id}
-                  src={"/post/image/" + post.fileName}
-                  style={{ width: "30%", margin: "10px 10px" }}
-                />
-              ))
-            : "no image found"}
-        </div>
-      </div>
-    </div>
+      </Container>
+    </React.Fragment>
   );
 };
 
