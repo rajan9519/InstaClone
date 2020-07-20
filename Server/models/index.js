@@ -14,6 +14,7 @@ mongoose.connect(
 const Pending = require("./pending");
 const User = require("./user");
 const Post = require("./post");
+const Picture = require("./post");
 const Like = require("./like");
 const Comment = require("./comment");
 const Follow = require("./follow");

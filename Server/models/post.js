@@ -52,3 +52,4 @@ const postSchema = new mongoose.Schema(
 );
 
 mongoose.model("Post", postSchema);
+mongoose.model("Picture", pictureSchema);

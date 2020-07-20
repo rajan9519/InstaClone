@@ -42,7 +42,7 @@ const uploadImage = (req) => {
       ).content;
 
       cloudinary.uploader
-        .upload(file, { folder: "employee" })
+        .upload(file, { folder: "insta" })
         .then((result) => resolve(result))
         .catch((err) => {
           reject(err);
