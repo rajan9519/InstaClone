@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 mongoose.connect(
   require("../key").MONGO_URL,
-  { useUnifiedTopology: true },
+  { useUnifiedTopology: true, useNewUrlParser: true },
   (err) => {
     if (!err) {
       console.log("Succesfully connected to the database");
