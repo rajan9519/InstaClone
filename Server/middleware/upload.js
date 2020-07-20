@@ -1,31 +1,55 @@
-const mongoose = require("mongoose");
+const cloudinary = require("cloudinary").v2;
+const DatauriParser = require("datauri/parser");
+const parser = new DatauriParser();
 const path = require("path");
 const multer = require("multer");
-const crypto = require("crypto");
-const GridFsStorage = require("multer-gridfs-storage");
-const mongoURI = require("../key").MONGO_URL;
 
-// Create storage engine
-const storage = new GridFsStorage({
-  url: mongoURI,
-  options: { useNewUrlParser: true, useUnifiedTopology: true },
-  file: (req, file) => {
-    return new Promise((resolve, reject) => {
-      crypto.randomBytes(16, (err, buf) => {
-        if (err) {
-          return reject(err);
-        }
-        const filename = buf.toString("hex") + path.extname(file.originalname);
-        req.filename = filename;
-        const fileInfo = {
-          filename: filename,
-          bucketName: "images",
-        };
-        resolve(fileInfo);
-      });
-    });
-  },
+const key = require("../key");
+
+const storage = multer.memoryStorage();
+const formParser = multer({ storage });
+
+cloudinary.config({
+  cloud_name: key.CLOUDINARY.CLOUD_NAME,
+  api_key: key.CLOUDINARY.API_KEY,
+  api_secret: key.CLOUDINARY.API_SECRET,
 });
-const upload = multer({ storage });
 
-module.exports = upload;
+const removeImage = (name) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.api.delete_resources([name], (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        if (result.deleted[name] == "deleted") {
+          resolve({ result: "deleted successfully" });
+        } else {
+          reject({ error: "unable to delete" });
+        }
+      }
+    });
+  });
+};
+
+const uploadImage = (req) => {
+  return new Promise((resolve, reject) => {
+    const extension = path.extname(req.file.originalname);
+
+    if ([".jpeg", ".jpg"].includes(extension)) {
+      const file = parser.format(
+        path.extname(req.file.originalname).toString(),
+        req.file.buffer
+      ).content;
+
+      cloudinary.uploader
+        .upload(file, { folder: "employee" })
+        .then((result) => resolve(result))
+        .catch((err) => {
+          reject(err);
+        });
+    } else {
+      reject({ error: "File type not allowed" });
+    }
+  });
+};
+module.exports = { uploadImage, removeImage, formParser };
