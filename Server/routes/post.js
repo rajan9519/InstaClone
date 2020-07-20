@@ -7,7 +7,6 @@ const { uploadImage, formParser } = require("../middleware/upload");
 const Post = mongoose.model("Post");
 const Like = mongoose.model("Like");
 const Comment = mongoose.model("Comment");
-const Picture = mongoose.model("Picture");
 
 router.get("/", loggedIn, (req, res) => {
   const liked = (post) => {
@@ -72,7 +71,8 @@ router.get("/", loggedIn, (req, res) => {
     });
 });
 
-router.post("/createPost", formParser.single("file"), (req, res) => {
+router.post("/createPost", loggedIn, formParser.single("file"), (req, res) => {
+  // add a security layer to verify the logged in user id and requested userid for the upload
   if (req.file) {
     const { title, body, userId } = req.body;
     if (!title || !body) {
@@ -81,12 +81,12 @@ router.post("/createPost", formParser.single("file"), (req, res) => {
     }
     uploadImage(req)
       .then((result) => {
-        const picture = new Picture({
+        const picture = {
           public_id: result.public_id,
           url: result.url,
           secure_url: result.secure_url,
           format: result.format,
-        });
+        };
         const post = new Post({
           title,
           body,

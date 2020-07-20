@@ -1,25 +1,6 @@
 const mongoose = require("mongoose");
 //const { ObjectId } = mongoose.Schema.Types;
 
-const pictureSchema = new mongoose.Schema({
-  public_id: {
-    type: String,
-    required: true,
-  },
-  url: {
-    type: String,
-    required: true,
-  },
-  secure_url: {
-    type: String,
-    required: true,
-  },
-  format: {
-    type: String,
-    required: true,
-  },
-});
-
 const postSchema = new mongoose.Schema(
   {
     title: {
@@ -30,7 +11,26 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    picture: pictureSchema,
+    picture: {
+      type: {
+        public_id: {
+          type: String,
+          required: true,
+        },
+        url: {
+          type: String,
+          required: true,
+        },
+        secure_url: {
+          type: String,
+          required: true,
+        },
+        format: {
+          type: String,
+          required: true,
+        },
+      },
+    },
     numLikes: {
       type: Number,
       default: 0,
@@ -52,4 +52,3 @@ const postSchema = new mongoose.Schema(
 );
 
 mongoose.model("Post", postSchema);
-mongoose.model("Picture", pictureSchema);

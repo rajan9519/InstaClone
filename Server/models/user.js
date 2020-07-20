@@ -26,8 +26,24 @@ const userSchema = new mongoose.Schema({
     default: 0,
   },
   dp: {
-    type: String,
-    default: "ac135f21f90f240e34b138207e0bf5bc.jpg",
+    type: {
+      public_id: {
+        type: String,
+        required: true,
+      },
+      url: {
+        type: String,
+        required: true,
+      },
+      secure_url: {
+        type: String,
+        required: true,
+      },
+      format: {
+        type: String,
+        required: true,
+      },
+    },
   },
 });
 
