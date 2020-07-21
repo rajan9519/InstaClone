@@ -29,21 +29,22 @@ const userSchema = new mongoose.Schema({
     type: {
       public_id: {
         type: String,
-        required: true,
+        default: "",
       },
       url: {
         type: String,
-        required: true,
+        default: "",
       },
       secure_url: {
         type: String,
-        required: true,
+        default: "",
       },
       format: {
         type: String,
-        required: true,
+        default: "",
       },
     },
+    default: () => ({}),
   },
 });
 

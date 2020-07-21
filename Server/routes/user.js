@@ -1,9 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const Grid = require("gridfs-stream");
+
 const loggedIn = require("../middleware/loggedIn");
-const upload = require("../middleware/upload");
+const {
+  uploadImage,
+  removeImage,
+  formParser,
+} = require("../middleware/upload");
 const mongoURI = require("../key").MONGO_URL;
 
 const Post = mongoose.model("Post");
@@ -14,27 +18,50 @@ const User = mongoose.model("User");
 
 const conn = mongoose.createConnection(mongoURI);
 
-let gfs;
-conn.once("open", () => {
-  gfs = Grid(conn.db, mongoose.mongo);
-  gfs.collection("images");
-});
+router.put("/uploaddp", loggedIn, formParser.single("file"), (req, res) => {
+  // Remove the previous dp from the database and then upload the new one,
 
-router.put("/uploaddp", loggedIn, upload.single("file"), (req, res) => {
-  User.findByIdAndUpdate(
-    req.user._id,
-    { $set: { dp: req.filename } },
-    { new: true },
-    (err, result) => {
-      if (err) {
-        return res.json({ error: err });
-      } else {
-        res.send(result);
+  uploadImage(req)
+    .then((result) => {
+      const picture = {
+        public_id: result.public_id,
+        url: result.url,
+        secure_url: result.secure_url,
+        format: result.format,
+      };
+
+      User.findByIdAndUpdate(
+        req.user._id,
+        { $set: { dp: picture } },
+        { new: true },
+        (err, result) => {
+          if (err) {
+            return res.json({ error: err });
+          } else {
+            res.send(result);
+            console.log(result);
+            console.log("succesfully updated ");
+          }
+        }
+      );
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.json({
+        error: "Unable to uplaod the Profile Please try again",
+      });
+    });
+
+  if (req.user.dp.secure_url) {
+    removeImage(req.user.dp.secure_url)
+      .then((result) => {
         console.log(result);
-        console.log("succesfully updated ");
-      }
-    }
-  );
+      })
+      .catch((error) => {
+        // add this public_id to the pending delete database
+        console.log(error);
+      });
+  }
 });
 router.post("/follow", loggedIn, (req, res) => {
   const { followerId, followeeId, unfollow } = req.body;
