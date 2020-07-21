@@ -35,7 +35,7 @@ const UserData = (props) => {
     <div className="user-card">
       <div className="user-data">
         <div>
-          <img className="profile-pic" src={"/post/image/" + props.dp}></img>
+          <img className="profile-pic" src={props.dp.secure_url}></img>
         </div>
         <div className="user-info">
           <Link to={"/profile/" + props._id} className="user-id">
@@ -44,9 +44,11 @@ const UserData = (props) => {
           <div className="user-name">{props.name}</div>
         </div>
       </div>
-      <button onClick={() => handleClick()} className="user-btn">
-        {ifollow ? "Unfollow" : "Follow"}
-      </button>
+      {JSON.parse(localStorage.getItem("user"))._id == props._id && (
+        <button onClick={() => handleClick()} className="user-btn">
+          {ifollow ? "Unfollow" : "Follow"}
+        </button>
+      )}
     </div>
   );
 };

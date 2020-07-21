@@ -103,19 +103,15 @@ const NavBar = () => {
           {users.length ? (
             <div>
               {search && state.isAuthenticated
-                ? users.map((user, i) => {
-                    if (user._id !== state.user._id) {
-                      return (
-                        <UserData
-                          key={user._id}
-                          name={user.name}
-                          _id={user._id}
-                          dp={user.dp}
-                          ifollow={follow[i]}
-                        />
-                      );
-                    }
-                  })
+                ? users.map((user, i) => (
+                    <UserData
+                      key={user._id}
+                      name={user.name}
+                      _id={user._id}
+                      dp={user.dp}
+                      ifollow={follow[i]}
+                    />
+                  ))
                 : null}
             </div>
           ) : search ? (
