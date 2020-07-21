@@ -7,9 +7,11 @@ import {
   Container,
   IconButton,
   Card,
+  CircularProgress,
 } from "@material-ui/core";
 import { UserData } from "../presentation";
 import { AuthContext } from "../../App";
+import { useHistory } from "react-router-dom";
 
 const CreatePost = () => {
   const [image, setImage] = useState("");
@@ -18,6 +20,8 @@ const CreatePost = () => {
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUplaoded] = useState(false);
   const { state, dispatch } = useContext(AuthContext);
+
+  const history = useHistory();
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,6 +75,11 @@ const CreatePost = () => {
 
     console.log("uploading");
   };
+  useEffect(() => {
+    if (uploaded) {
+      history.push("/");
+    }
+  }, [uploaded]);
   return (
     <Container maxWidth="sm">
       <Card>
@@ -128,35 +137,39 @@ const CreatePost = () => {
           )}
         </div>
         <Divider />
-        <div>
-          <input
-            accept="image/jpg,image/jpeg,image/png"
-            className={classes.input}
-            id="icon-button-file"
-            type="file"
-            style={{ display: "none" }}
-            onChange={(e) => handleImageChange(e)}
-          />
-          <label htmlFor="icon-button-file">
-            <IconButton
-              color="primary"
-              aria-label="upload picture"
-              component="span"
+        {uploading ? (
+          <CircularProgress />
+        ) : (
+          <div>
+            <input
+              accept="image/jpg,image/jpeg,image/png"
+              className={classes.input}
+              id="icon-button-file"
+              type="file"
+              style={{ display: "none" }}
+              onChange={(e) => handleImageChange(e)}
+            />
+            <label htmlFor="icon-button-file">
+              <IconButton
+                color="primary"
+                aria-label="upload picture"
+                component="span"
+                disabled={uploading}
+              >
+                <PhotoCamera />
+              </IconButton>
+            </label>
+            <Button
               disabled={uploading}
+              variant="contained"
+              color="primary"
+              component="span"
+              onClick={(e) => handleSubmit(e)}
             >
-              <PhotoCamera />
-            </IconButton>
-          </label>
-          <Button
-            disabled={uploading}
-            variant="contained"
-            color="primary"
-            component="span"
-            onClick={(e) => handleSubmit(e)}
-          >
-            Upload
-          </Button>
-        </div>
+              Upload
+            </Button>
+          </div>
+        )}
       </Card>
     </Container>
   );
