@@ -236,6 +236,7 @@ const Profile = () => {
                     id="mydp"
                     type="file"
                     name="image"
+                    accept="image/jpg,image/jpeg,image/png"
                     placeholder="Descrition"
                     style={{ display: "none" }}
                     onChange={(e) => {
