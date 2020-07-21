@@ -5,7 +5,6 @@ import { AuthContext } from "../../App";
 const UserData = (props) => {
   const { state, dispatch } = useContext(AuthContext);
   const [ifollow, setIfollow] = useState(props.ifollow);
-
   useEffect(() => {
     setIfollow(props.ifollow);
   }, [props.ifollow]);
@@ -35,7 +34,7 @@ const UserData = (props) => {
     <div className="user-card">
       <div className="user-data">
         <div>
-          <img className="profile-pic" src={props.dp.secure_url}></img>
+          <img className="profile-pic" src={props.dp}></img>
         </div>
         <div className="user-info">
           <Link to={"/profile/" + props._id} className="user-id">
@@ -44,7 +43,7 @@ const UserData = (props) => {
           <div className="user-name">{props.name}</div>
         </div>
       </div>
-      {JSON.parse(localStorage.getItem("user"))._id == props._id && (
+      {JSON.parse(localStorage.getItem("user"))._id != props._id && (
         <button onClick={() => handleClick()} className="user-btn">
           {ifollow ? "Unfollow" : "Follow"}
         </button>

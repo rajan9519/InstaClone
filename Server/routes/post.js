@@ -70,9 +70,10 @@ router.get("/", loggedIn, (req, res) => {
 
 router.post("/createPost", loggedIn, formParser.single("file"), (req, res) => {
   // add a security layer to verify the logged in user id and requested userid for the upload
+  console.log(req.user);
   if (req.file) {
     const { text } = req.body;
-    const userId = req.user._Id;
+    const userId = req.user._id;
     uploadImage(req)
       .then((result) => {
         const picture = {

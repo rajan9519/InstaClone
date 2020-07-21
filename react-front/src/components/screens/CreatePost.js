@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { PhotoCamera } from "@material-ui/icons";
 import {
@@ -9,20 +9,24 @@ import {
   Card,
 } from "@material-ui/core";
 import { UserData } from "../presentation";
+import { AuthContext } from "../../App";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 345,
-    maxHeight: 345,
-  },
-}));
+const CreatePost = () => {
+  const [image, setImage] = useState("");
+  const [image2, setImage2] = useState("");
+  const [text, setText] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [uploaded, setUplaoded] = useState(false);
+  const { state, dispatch } = useContext(AuthContext);
 
-export default function RecipeReviewCard() {
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      maxWidth: 345,
+      maxHeight: 345,
+    },
+  }));
+
   const classes = useStyles();
-  const [image, setImgae] = React.useState("");
-  const [text, setText] = React.useState("");
-  const [uploading, setUploading] = React.useState(false);
-  const [uploaded, setUplaoded] = React.useState(false);
 
   const handleTextChange = (e) => {
     const { target } = e;
@@ -33,18 +37,19 @@ export default function RecipeReviewCard() {
   const handleImageChange = (e) => {
     const { target } = e;
     const reader = new FileReader();
+    setImage2(target.files[0]);
     reader.readAsDataURL(target.files[0]);
     reader.onerror = () => {
       alert("failer to get the file Please try again");
     };
     reader.onload = (event) => {
-      setImgae(event.target.result);
+      setImage(event.target.result);
     };
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("file", image);
+    formData.append("file", image2);
     formData.append("text", text.trim());
     setUploading(true);
     fetch("/post/createPost", {
@@ -83,12 +88,9 @@ export default function RecipeReviewCard() {
         <Divider />
         <div>
           <UserData
-            name="rajan singh"
-            dp={{
-              secure_url:
-                "https://scontent.fdel11-1.fna.fbcdn.net/v/t1.0-1/p320x320/79821923_2562806683964756_5081982137020710912_o.jpg?_nc_cat=108&_nc_sid=7206a8&_nc_ohc=GrSCPPZMQVEAX_u5BCk&_nc_ht=scontent.fdel11-1.fna&_nc_tp=6&oh=ada10084e8edad3df514f5cae1dd2e46&oe=5F3AC33C",
-            }}
-            _id="lsakfn"
+            name={state.user.name}
+            dp={state.user.dp.secure_url}
+            _id={state.user._id}
           />
         </div>
         <Divider />
@@ -158,4 +160,5 @@ export default function RecipeReviewCard() {
       </Card>
     </Container>
   );
-}
+};
+export default CreatePost;
