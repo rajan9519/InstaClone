@@ -99,7 +99,7 @@ const Post = (props) => {
           }}
         >
           <img
-            src={"/post/image/" + props.dp}
+            src={props.dpUrl}
             style={{
               width: "35px",
               height: "35px",
@@ -118,7 +118,7 @@ const Post = (props) => {
           <i className="material-icons">more_horiz</i>
         </button>
       </div>
-      <img src={"/post/image/" + props.filename} style={{ width: "100%" }} />
+      <img src={props.postUrl} style={{ width: "100%" }} />
       <div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div>

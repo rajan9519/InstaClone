@@ -35,7 +35,7 @@ const uploadImage = (req) => {
   return new Promise((resolve, reject) => {
     const extension = path.extname(req.file.originalname);
 
-    if ([".jpeg", ".jpg"].includes(extension)) {
+    if ([".jpeg", ".jpg", ".png"].includes(extension)) {
       const file = parser.format(
         path.extname(req.file.originalname).toString(),
         req.file.buffer

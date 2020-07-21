@@ -34,14 +34,14 @@ const Home = () => {
     console.log(posts);
     allPosts = posts.map((post) => (
       <Post
-        filename={post.fileName}
+        postUrl={post.picture.secure_url}
         name={post.postedBy.name}
         likes={post.numLikes}
         postId={post._id}
         userId={post.postedBy._id}
         isLiked={post.isLiked}
         key={post._id}
-        dp={post.postedBy.dp}
+        dpUrl={post.postedBy.dp.secure_url}
       />
     ));
   }

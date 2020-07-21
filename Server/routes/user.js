@@ -16,8 +16,6 @@ const Comment = mongoose.model("Comment");
 const Follow = mongoose.model("Follow");
 const User = mongoose.model("User");
 
-const conn = mongoose.createConnection(mongoURI);
-
 router.put("/uploaddp", loggedIn, formParser.single("file"), (req, res) => {
   // Remove the previous dp from the database and then upload the new one,
 

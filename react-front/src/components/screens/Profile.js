@@ -213,7 +213,7 @@ const Profile = () => {
           <Grid item xs={4}>
             <div className="dp">
               <img
-                src={"/post/image/" + dp}
+                src={dp.secure_url}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -316,7 +316,7 @@ const Profile = () => {
                 ? posts.map((post) => (
                     <img
                       key={post._id}
-                      src={"/post/image/" + post.fileName}
+                      src={post.picture.secure_url}
                       style={{ width: "30%", margin: "10px 10px" }}
                     />
                   ))
