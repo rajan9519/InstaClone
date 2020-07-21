@@ -34,7 +34,6 @@ const Post = (props) => {
       method: "put",
       body: JSON.stringify({
         postId,
-        userId: JSON.parse(localStorage.getItem("user"))._id,
         isLiked,
       }),
       headers: {
@@ -61,7 +60,6 @@ const Post = (props) => {
       method: "put",
       body: JSON.stringify({
         postId,
-        userId: JSON.parse(localStorage.getItem("user"))._id,
         text,
       }),
       headers: {

@@ -11,22 +11,19 @@ const Comment = mongoose.model("Comment");
 router.get("/", loggedIn, (req, res) => {
   const liked = (post) => {
     return new Promise((resolve, reject) => {
-      Like.find(
-        { likedBy: req.headers.userid, postId: post._id },
-        (err, liked) => {
-          console.log(liked);
-          if (err) {
-            reject(err);
-          }
-          if (liked.length) {
-            post.isLiked = true;
-            resolve(post);
-          } else {
-            post.isLiked = false;
-            resolve(post);
-          }
+      Like.find({ likedBy: req.user._id, postId: post._id }, (err, liked) => {
+        console.log(liked);
+        if (err) {
+          reject(err);
         }
-      );
+        if (liked.length) {
+          post.isLiked = true;
+          resolve(post);
+        } else {
+          post.isLiked = false;
+          resolve(post);
+        }
+      });
     });
   };
 
@@ -74,11 +71,8 @@ router.get("/", loggedIn, (req, res) => {
 router.post("/createPost", loggedIn, formParser.single("file"), (req, res) => {
   // add a security layer to verify the logged in user id and requested userid for the upload
   if (req.file) {
-    const { title, body, userId } = req.body;
-    if (!title || !body) {
-      res.status(422).json({ error: "Please add all the fields" });
-      return;
-    }
+    const { text } = req.body;
+    const userId = req.user._Id;
     uploadImage(req)
       .then((result) => {
         const picture = {
@@ -88,8 +82,7 @@ router.post("/createPost", loggedIn, formParser.single("file"), (req, res) => {
           format: result.format,
         };
         const post = new Post({
-          title,
-          body,
+          text,
           postedBy: userId,
           picture: picture,
         });
@@ -117,7 +110,8 @@ router.post("/createPost", loggedIn, formParser.single("file"), (req, res) => {
 });
 
 router.put("/like", loggedIn, (req, res) => {
-  const { postId, userId, isLiked } = req.body;
+  const { postId, isLiked } = req.body;
+  const userId = req.user._id;
 
   const liked = (userId, postId) => {
     return new Promise((resolve, reject) => {
@@ -230,7 +224,7 @@ router.get("/comment/:postId", loggedIn, (req, res) => {
 });
 router.put("/comment", loggedIn, (req, res) => {
   const comment = new Comment({
-    commentBy: req.body.userId,
+    commentBy: req.user._id,
     commentOn: req.body.postId,
     comment: req.body.text,
   });

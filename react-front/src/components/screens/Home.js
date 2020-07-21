@@ -12,9 +12,6 @@ const Home = () => {
       "Content-Type": "application/json",
       headers: {
         authorization: localStorage.getItem("token"),
-        userid: localStorage.getItem("user")
-          ? JSON.parse(localStorage.getItem("user"))._id
-          : null,
       },
     })
       .then((res) => res.json())
