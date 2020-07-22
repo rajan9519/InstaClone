@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 mongoose.connect(
-  require("../key").MONGO_URL,
+  require("../config/key").MONGO_URL,
   { useUnifiedTopology: true, useNewUrlParser: true },
   (err) => {
     if (!err) {

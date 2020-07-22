@@ -8,7 +8,6 @@ const {
   removeImage,
   formParser,
 } = require("../middleware/upload");
-const mongoURI = require("../key").MONGO_URL;
 
 const Post = mongoose.model("Post");
 const Like = mongoose.model("Like");

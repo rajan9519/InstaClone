@@ -27,14 +27,14 @@ const pendingSchema = new mongoose.Schema({
   },
   dp: {
     type: String,
-    default: "ac135f21f90f240e34b138207e0bf5bc.jpg",
+    default: "",
   },
   token: {
     type: String,
   },
   createdAt: {
     type: Date,
-    expires: 3600,
+    expires: 600,
     default: Date.now,
   },
 });

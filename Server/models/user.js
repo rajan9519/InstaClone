@@ -44,7 +44,12 @@ const userSchema = new mongoose.Schema({
         default: "",
       },
     },
-    default: () => ({}),
+    default: {
+      public_id: "",
+      url: "",
+      secure_url: "",
+      format: "",
+    },
   },
 });
 

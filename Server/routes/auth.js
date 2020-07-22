@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const sgMail = require("@sendgrid/mail");
 const crypto = require("crypto");
 
-const { JWT_SECRET } = require("../key");
+const { JWT_SECRET, EMAIL } = require("../config/key");
 const User = mongoose.model("User");
 const SocketInfo = mongoose.model("SocketInfo");
 const Pending = mongoose.model("Pending");
@@ -50,10 +50,6 @@ const emailExistPending = (email, _id) => {
   });
 };
 
-router.get("/", (req, res) => {
-  res.send("you on authentication router");
-});
-
 router.get("/validate/:email/:token", (req, res) => {
   emailExist(req.params.email)
     .then((yes) => {
@@ -79,13 +75,17 @@ router.get("/validate/:email/:token", (req, res) => {
                       userId: user._id,
                     });
                     socketUser.save();
-                    return res.send(
-                      "Your Email Verified Successfully please nevigate to the login page to login to your account"
-                    );
+                    return res.send(`
+                    <div>
+                      <p>You have successfully Verified Your account</p>
+                      <p>Now you can sign in</p>
+                      <a href="https://rajan9519.herokuapp.com/">https://rajan9519.herokuapp.com/<a>
+                    </div>
+                    `);
                   })
                   .catch((err) => {
                     console.log(err);
-                    return res.send("Some Internal Sever erro");
+                    return res.send("Some Internal Sever error");
                   });
               })
               .catch((err) => {
@@ -94,7 +94,12 @@ router.get("/validate/:email/:token", (req, res) => {
               });
           } else {
             return res.send(
-              "Unable to verify the user please create account again"
+              `<div>
+                <p>Either you have already verified your account or link has expired</p>
+                <p>Please create your account again</p>
+                <a href="https://rajan9519.herokuapp.com/">https://rajan9519.herokuapp.com/<a>
+              </div>
+            `
             );
           }
         });
@@ -107,13 +112,19 @@ router.get("/validate/:email/:token", (req, res) => {
 });
 
 router.post("/signup", (req, res) => {
-  const { _id, name, email, password } = req.body;
-  if (!name || !email || !password) {
+  let { _id, name, email, password } = req.body;
+  _id = _id.trim();
+  name = name.trim();
+  email = email.trim();
+  password = password.trim();
+  if (!name || !email || !password || !_id) {
     res.status(422).json({ error: "please add all the fields" });
     return;
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
     res.json({ error: "Invalid Email Address" });
     return;
+  } else if (_id.toLowerCase() != _id) {
+    res.json({ error: "username must be all lowercase" });
   }
   emailExistPending(email, _id).then((yes) => {
     if (yes) {
@@ -145,18 +156,20 @@ router.post("/signup", (req, res) => {
               pending
                 .save()
                 .then((pend) => {
-                  sgMail.setApiKey(require("../key").SENDGRID);
+                  sgMail.setApiKey(require("../config/key").SENDGRID);
                   const msg = {
                     to: email,
                     from: "rajan@mygluecode.com",
-                    subject: "Confirm Email",
-                    text: "and easy to do anywhere, even with Node.js",
+                    subject: "Confirm your account on MyGlueCode",
+                    text: "MyGlueCode Team",
                     html: `
-                    <strong>Thank You for registering Your Accout with us</strong>
-                    <p> The verification link will expire in 1 hour </p>
+                    <p>Thanks for signing up with MyGlueCode! You must follow this link to activate your account:</p>
                     <p>Email: ${email}</p>
                     <p>Password: ${password}</p>
-                    <a href="http://localhost:5000/validate/${email}/${token}"> Click heare to Verify </a>
+                    <a href="${EMAIL}/validate/${email}/${token}"> ${EMAIL}/validate/${email}/${token} </a>
+                    <p>Have fun, and don't hesitate to contact us with your feedback.</p>
+                    <p>The MyGlueCode team</p>
+                    <a href="https://rajan9519.herokuapp.com/"> https://rajan9519.herokuapp.com/ </a>
                     `,
                   };
                   sgMail

@@ -4,7 +4,7 @@ const parser = new DatauriParser();
 const path = require("path");
 const multer = require("multer");
 
-const key = require("../key");
+const key = require("../config/key");
 
 const storage = multer.memoryStorage();
 const formParser = multer({ storage });
