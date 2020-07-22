@@ -10,9 +10,9 @@ const storage = multer.memoryStorage();
 const formParser = multer({ storage });
 
 cloudinary.config({
-  cloud_name: key.CLOUDINARY.CLOUD_NAME,
-  api_key: key.CLOUDINARY.API_KEY,
-  api_secret: key.CLOUDINARY.API_SECRET,
+  cloud_name: key.CLOUDINARY_CLOUD_NAME,
+  api_key: key.CLOUDINARY_API_KEY,
+  api_secret: key.CLOUDINARY_API_SECRET,
 });
 
 const removeImage = (name) => {
