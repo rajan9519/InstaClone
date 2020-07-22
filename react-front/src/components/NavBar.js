@@ -78,7 +78,7 @@ const NavBar = () => {
           to={state.isAuthenticated ? "/" : "/signin"}
           className="brand-logo left"
         >
-          Instagram
+          MyGlueCode
         </Link>
         {!state.isAuthenticated ? <BeforeSign /> : <AfterSign />}
       </div>

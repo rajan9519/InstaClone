@@ -56,11 +56,11 @@ const SignUp = () => {
     e.preventDefault();
     const { value, name } = e.target;
     if (name === "email") {
-      setEmail(value);
+      setEmail(value.trim().toLowerCase());
     } else if (name === "password") {
       setPassword(value);
     } else if (name === "_id") {
-      set_id(value);
+      set_id(value.trim().toLowerCase());
     } else {
       setName(value);
     }
@@ -98,7 +98,7 @@ const SignUp = () => {
         }}
       >
         <div className="auth-card">
-          <h2>Instagram</h2>
+          <h2>MyGlueCode</h2>
           <input
             autoComplete="off"
             type="text"

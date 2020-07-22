@@ -60,14 +60,14 @@ const SignIn = () => {
         }}
       >
         <div className="auth-card">
-          <h2>Instagram</h2>
+          <h2>MyGlueCode</h2>
           <input
             autoComplete="off"
             type="text"
             placeholder="email"
             name="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value.trim().toLowerCase())}
           />
           <input
             type="password"

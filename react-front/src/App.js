@@ -20,7 +20,6 @@ import {
 import { reducer } from "./reducer/authReducer";
 import { ChatRoom } from "./components/presentation";
 import socket from "./reducer/socketInstance";
-import Test from "./components/screens/Test";
 
 export const AuthContext = createContext();
 export const initialState = {
@@ -76,9 +75,6 @@ const Routing = () => {
       </Route>
       <Route exact path="/chatroom/:recieverId">
         <ChatRoom />
-      </Route>
-      <Route exact path="/test">
-        <Test />
       </Route>
     </Switch>
   );

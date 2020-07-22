@@ -38,7 +38,11 @@ const Home = () => {
         userId={post.postedBy._id}
         isLiked={post.isLiked}
         key={post._id}
-        dpUrl={post.postedBy.dp.secure_url}
+        dpUrl={
+          post.postedBy.dp.secure_url
+            ? post.postedBy.dp.secure_url
+            : "https://res.cloudinary.com/rajan9519/image/upload/v1595414068/insta/default-dp_fv73wk.png"
+        }
       />
     ));
   }

@@ -34,7 +34,14 @@ const UserData = (props) => {
     <div className="user-card">
       <div className="user-data">
         <div>
-          <img className="profile-pic" src={props.dp}></img>
+          <img
+            className="profile-pic"
+            src={
+              props.dp
+                ? props.dp
+                : "https://res.cloudinary.com/rajan9519/image/upload/v1595414068/insta/default-dp_fv73wk.png"
+            }
+          ></img>
         </div>
         <div className="user-info">
           <Link to={"/profile/" + props._id} className="user-id">
