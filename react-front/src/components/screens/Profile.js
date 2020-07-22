@@ -13,6 +13,8 @@ import {
   Icon,
   Divider,
   Box,
+  CircularProgress,
+  Dialog,
 } from "@material-ui/core";
 
 const Profile = () => {
@@ -31,6 +33,8 @@ const Profile = () => {
   const [image, setImage] = useState(undefined);
   const [users, setUsers] = useState("");
   const [ifollow2, setIfollow2] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     console.log(userId);
@@ -100,9 +104,11 @@ const Profile = () => {
         .then((res) => res.json())
         .then((data) => {
           setDp(data.dp);
+          setUploading(false);
         })
         .catch((err) => {
           console.log(err);
+          setUploading(false);
         });
       console.log("image changed");
     }
@@ -133,8 +139,9 @@ const Profile = () => {
         });
     }
   };
+
   const followData = (type) => {
-    document.getElementById("followData").show();
+    setOpen(true);
     fetch("/user/" + userId + "/" + type, {
       method: "get",
       headers: { authorization: state.token },
@@ -143,6 +150,7 @@ const Profile = () => {
       .then((data) => {
         setUsers(data.users);
         setIfollow2(data.ifollow);
+
         console.log(data);
       })
       .catch((err) => {
@@ -172,35 +180,29 @@ const Profile = () => {
             {following} Following
           </Button>
         </Grid>
-        <dialog id="followData">
-          <button
-            className="btn-icon"
-            onClick={() => document.getElementById("followData").close()}
-          >
-            <i className="material-icons">cancel</i>
-          </button>
+        <Dialog
+          onClose={() => setOpen(false)}
+          aria-labelledby="simple-dialog-title"
+          open={open}
+        >
           <div>
-            {users ? (
-              <div>
-                {users.map((user, i) => {
-                  if (user._id !== state.user._id) {
-                    return (
-                      <UserData
-                        key={user._id}
-                        name={user.name}
-                        _id={user._id}
-                        dp={user.dp}
-                        ifollow={ifollow2[i]}
-                      />
-                    );
-                  }
-                })}
+            {users.length ? (
+              <div style={{ minWidth: "200px", minHeight: "50px" }}>
+                {users.map((user, i) => (
+                  <UserData
+                    key={user._id}
+                    name={user.name}
+                    _id={user._id}
+                    dp={user.dp.secure_url}
+                    ifollow={ifollow2[i]}
+                  />
+                ))}
               </div>
             ) : (
               "No results"
             )}
           </div>
-        </dialog>
+        </Dialog>
       </Grid>
     );
   };
@@ -212,26 +214,34 @@ const Profile = () => {
         <Grid container spacing={2}>
           <Grid item xs={4}>
             <div className="dp">
-              <img
-                src={dp.secure_url}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  maxWidth: "150px",
-                  maxHeight: "150px",
-                  borderRadius: "100%",
-                  marginBottom: "10px",
-                }}
-              />
+              {uploading ? (
+                <CircularProgress />
+              ) : (
+                <img
+                  src={dp.secure_url}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    maxWidth: "150px",
+                    maxHeight: "150px",
+                    borderRadius: "100%",
+                    marginBottom: "10px",
+                  }}
+                />
+              )}
               {state.user._id === userId ? (
                 <div>
-                  <button
-                    onClick={() => {
-                      document.getElementById("mydp").click();
-                    }}
-                  >
-                    Change Pic
-                  </button>
+                  {!uploading && (
+                    <Button
+                      disabled={uploading}
+                      variant="contained"
+                      color="primary"
+                      component="span"
+                      onClick={() => document.getElementById("mydp").click()}
+                    >
+                      update
+                    </Button>
+                  )}
                   <input
                     id="mydp"
                     type="file"
@@ -241,6 +251,7 @@ const Profile = () => {
                     style={{ display: "none" }}
                     onChange={(e) => {
                       setImage(e.target.files[0]);
+                      setUploading(true);
                     }}
                   />
                 </div>
@@ -285,10 +296,6 @@ const Profile = () => {
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
                     <Typography variant="button">{name}</Typography>
-                    <Typography>VNITian</Typography>
-                    <Typography>Rajput</Typography>
-                    <Typography>Positivity king</Typography>
-                    <Typography>Optimistic</Typography>
                   </Grid>
                 </Grid>
               </Grid>
@@ -306,12 +313,6 @@ const Profile = () => {
         </Box>
         <div>
           <div>
-            <div style={{ display: "flex", justifyContent: "space-around" }}>
-              <button>POSTS</button>
-              <button>IGTV</button>
-              <button>SAVED</button>
-              <button>TAGGED</button>
-            </div>
             <div style={{ display: "flex", flexWrap: "wrap" }}>
               {posts
                 ? posts.map((post) => (

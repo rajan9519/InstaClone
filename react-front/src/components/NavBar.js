@@ -108,7 +108,7 @@ const NavBar = () => {
                       key={user._id}
                       name={user.name}
                       _id={user._id}
-                      dp={user.dp}
+                      dp={user.dp.secure_url}
                       ifollow={follow[i]}
                     />
                   ))

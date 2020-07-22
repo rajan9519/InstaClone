@@ -51,7 +51,7 @@ router.put("/uploaddp", loggedIn, formParser.single("file"), (req, res) => {
     });
 
   if (req.user.dp.secure_url) {
-    removeImage(req.user.dp.secure_url)
+    removeImage(req.user.dp.public_id)
       .then((result) => {
         console.log(result);
       })
@@ -272,6 +272,7 @@ router.get("/:id/:type", loggedIn, (req, res) => {
         }
         console.log(users);
         if (users.length) {
+          console.log(users);
           Promise.all(users.map((user) => follow(user.followerId))).then(
             (data) => {
               res.json({
