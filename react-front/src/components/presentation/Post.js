@@ -2,6 +2,14 @@ import React, { useState, useEffect } from "react";
 import icons from "../../assets";
 import { Link } from "react-router-dom";
 import Comment from "./Comment";
+import {
+  Dialog,
+  DialogTitle,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+} from "@material-ui/core";
 
 const Post = (props) => {
   const url =
@@ -14,6 +22,7 @@ const Post = (props) => {
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
   const [isLiked, setIsLiked] = useState(props.isLiked);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     fetch("/post/comment/" + props.postId, {
@@ -112,9 +121,42 @@ const Post = (props) => {
             {userName}
           </Link>
         </div>
-        <button className="btn-icon">
-          <i className="material-icons">more_horiz</i>
-        </button>
+        {JSON.parse(localStorage.getItem("user"))._id == userId && (
+          <div>
+            <button
+              className="btn-icon"
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              <i className="material-icons">delete</i>
+            </button>
+
+            <Dialog
+              onClose={() => setOpen(false)}
+              aria-labelledby="simple-dialog-title"
+              open={open}
+            >
+              <DialogTitle id="simple-dialog-title">
+                Cofirm Deleting Post
+              </DialogTitle>
+              <List component="nav" aria-label="main mailbox folders">
+                <ListItem button>
+                  <ListItemText primary="Confirm" />
+                </ListItem>
+                <Divider />
+                <ListItem button>
+                  <ListItemText
+                    primary="Cancel"
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                  />
+                </ListItem>
+              </List>
+            </Dialog>
+          </div>
+        )}
       </div>
       <img src={props.postUrl} style={{ width: "100%" }} />
       <div>
