@@ -38,9 +38,7 @@ const Desk = (props) => {
         </Link>
       </span>{" "}
       <span>{lessContent}</span>
-      <span id="dots" style={{ display: dispDot }}>
-        ...
-      </span>
+      <span style={{ display: dispDot }}>...</span>
       <span style={{ display: dispMore }}>{moreContent}</span>
       <span style={{ display: moreContent ? "inline" : "none" }}>
         <button

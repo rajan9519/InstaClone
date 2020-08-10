@@ -9,6 +9,7 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  Container,
 } from "@material-ui/core";
 import Desk from "./Desk";
 
@@ -222,15 +223,7 @@ const Post = (props) => {
               View all <span>{comments.length}</span> comments
             </a>
             <div className="comments">
-              {comments.length
-                ? comments.map((comment) => (
-                    <Comment
-                      key={comment._id}
-                      _id={comment.commentBy}
-                      comment={comment.comment}
-                    />
-                  ))
-                : null}
+              {comments.length ? <Comment comments={comments} /> : null}
             </div>
           </div>
         </div>
