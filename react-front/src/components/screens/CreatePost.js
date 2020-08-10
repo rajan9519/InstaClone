@@ -160,7 +160,7 @@ const CreatePost = () => {
               </IconButton>
             </label>
             <Button
-              disabled={uploading}
+              disabled={uploading || !image}
               variant="contained"
               color="primary"
               component="span"
