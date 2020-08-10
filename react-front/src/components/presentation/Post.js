@@ -230,7 +230,7 @@ const Post = (props) => {
           </div>
         </div>
         <div>
-          <a>1 hours ago</a>
+          <a>{props.time}</a>
         </div>
         <div>
           <form className="comment-form">
