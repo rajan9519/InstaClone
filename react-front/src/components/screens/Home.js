@@ -48,6 +48,7 @@ const Home = () => {
             : "https://res.cloudinary.com/rajan9519/image/upload/v1595414068/insta/default-dp_fv73wk.png"
         }
         filter={filter}
+        text={post.text}
       />
     ));
   }

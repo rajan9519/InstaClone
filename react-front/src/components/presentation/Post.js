@@ -10,6 +10,7 @@ import {
   ListItemText,
   Divider,
 } from "@material-ui/core";
+import Desk from "./Desk";
 
 const Post = (props) => {
   const url =
@@ -209,6 +210,7 @@ const Post = (props) => {
         <div>
           <span>{likes} Likes</span>
         </div>
+        <Desk _id={userId} text={props.text} />
         <div>
           <div>
             <a>
