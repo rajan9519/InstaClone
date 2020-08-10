@@ -2,7 +2,11 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const loggedIn = require("../middleware/loggedIn");
-const { uploadImage, formParser } = require("../middleware/upload");
+const {
+  uploadImage,
+  removeImage,
+  formParser,
+} = require("../middleware/upload");
 
 const Post = mongoose.model("Post");
 const Like = mongoose.model("Like");
@@ -250,6 +254,30 @@ router.put("/comment", loggedIn, (req, res) => {
     })
     .catch((err) => {
       console.log(err);
+    });
+});
+
+router.delete("/delete/:id", loggedIn, (req, res) => {
+  Post.findOneAndDelete({ _id: req.params.id, postedBy: req.user._id })
+    .then((data) => {
+      if (data) {
+        console.log(data);
+        res.json({ success: "Post Deleted Succesfully" });
+        removeImage(data.picture.public_id)
+          .then((result) => {
+            console.log(result);
+          })
+          .catch((error) => {
+            // add this public_id to the pending delete database
+            console.log(error);
+          });
+      } else {
+        res.json({ error: "Unauthorized Deletion or Post not found by you" });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.json({ error: "Unable to delete the post Please try again" });
     });
 });
 
