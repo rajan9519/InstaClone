@@ -27,6 +27,10 @@ const Home = () => {
       });
   }, []);
 
+  const filter = (postId) => {
+    setPosts((posts) => posts.filter((post) => post._id != postId));
+  };
+
   if (posts) {
     console.log(posts);
     allPosts = posts.map((post) => (
@@ -43,6 +47,7 @@ const Home = () => {
             ? post.postedBy.dp.secure_url
             : "https://res.cloudinary.com/rajan9519/image/upload/v1595414068/insta/default-dp_fv73wk.png"
         }
+        filter={filter}
       />
     ));
   }

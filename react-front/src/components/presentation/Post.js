@@ -89,6 +89,27 @@ const Post = (props) => {
     console.log("commented");
   };
 
+  const handleDeletePost = (e) => {
+    e.preventDefault();
+    fetch("/post/delete/" + postId, {
+      method: "delete",
+      headers: { authorization: localStorage.getItem("token") },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          console.log(data.message);
+          props.filter(postId);
+        }
+        setOpen(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setOpen(false);
+      });
+  };
   return (
     <div
       style={{
@@ -141,7 +162,7 @@ const Post = (props) => {
                 Cofirm Deleting Post
               </DialogTitle>
               <List component="nav" aria-label="main mailbox folders">
-                <ListItem button>
+                <ListItem button onClick={handleDeletePost}>
                   <ListItemText primary="Confirm" />
                 </ListItem>
                 <Divider />

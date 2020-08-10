@@ -262,7 +262,7 @@ router.delete("/delete/:id", loggedIn, (req, res) => {
     .then((data) => {
       if (data) {
         console.log(data);
-        res.json({ success: "Post Deleted Succesfully" });
+        res.json({ message: "Post Deleted Succesfully" });
         removeImage(data.picture.public_id)
           .then((result) => {
             console.log(result);
