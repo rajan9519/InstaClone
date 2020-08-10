@@ -178,6 +178,7 @@ input {
   padding: 10px;
 }
 .comments {
+  padding: 10px 0px 10px 5px;
   max-height: 200px;
   overflow-y: scroll;
 }

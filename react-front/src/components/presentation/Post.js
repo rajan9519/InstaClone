@@ -217,16 +217,11 @@ const Post = (props) => {
           <span>{likes} Likes</span>
         </div>
         <Desk _id={userId} text={props.text} />
-        <div>
-          <div>
-            <a>
-              View all <span>{comments.length}</span> comments
-            </a>
-            <div className="comments">
-              {comments.length ? <Comment comments={comments} /> : null}
-            </div>
-          </div>
+
+        <div className="comments">
+          {comments.length ? <Comment comments={comments} /> : null}
         </div>
+
         <div>
           <a>{props.time}</a>
         </div>
