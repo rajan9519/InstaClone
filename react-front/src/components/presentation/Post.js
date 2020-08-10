@@ -39,6 +39,11 @@ const Post = (props) => {
   }, [props.postId]);
   const handleLike = (e) => {
     e.preventDefault();
+    if (isLiked) {
+      setLikes(likes - 1);
+    } else {
+      setLikes(likes + 1);
+    }
     setIsLiked(!isLiked);
     fetch("/post/like", {
       method: "put",
