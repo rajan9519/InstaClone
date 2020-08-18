@@ -73,6 +73,9 @@ const Routing = () => {
       <Route exact path="/signin">
         <SignIn />
       </Route>
+      {/* messenger ui credits 
+          https://github.com/sejr/react-messenger 
+       */}
       <Route exact path="/chat">
         <Messenger />
       </Route>
