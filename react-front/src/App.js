@@ -18,7 +18,7 @@ import {
   show,
 } from "./components/screens";
 import { reducer } from "./reducer/authReducer";
-import { ChatRoom } from "./components/presentation";
+import Messenger from "./components/chat/Messenger";
 import socket from "./reducer/socketInstance";
 
 export const AuthContext = createContext();
@@ -73,8 +73,11 @@ const Routing = () => {
       <Route exact path="/signin">
         <SignIn />
       </Route>
-      <Route exact path="/chatroom/:recieverId">
-        <ChatRoom />
+      {/* messenger ui credits 
+          https://github.com/sejr/react-messenger 
+       */}
+      <Route exact path="/chat">
+        <Messenger />
       </Route>
     </Switch>
   );
